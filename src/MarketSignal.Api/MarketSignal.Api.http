@@ -1,0 +1,6 @@
+@MarketSignal.Api_HostAddress = http://localhost:5176
+
+GET {{MarketSignal.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
