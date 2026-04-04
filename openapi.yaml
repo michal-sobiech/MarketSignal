@@ -36,13 +36,9 @@ components:
           type: string
           example: AAPL
 
-    AsyncJobResponse:
-      type: object
-      required: [jobId]
-      properties:
-        jobId:
-          type: number
-          format: int64
+    JobId:
+      type: number
+      format: int64
 
     GetJobResultResponse:
       oneOf:
@@ -144,7 +140,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AsyncJobResponse"
+                type: object
+                required: [jobId]
+                properties:
+                  jobId:
+                    $ref: "#/components/schemas/JobId"
         "400":
           description: Bad request.
         "404":
@@ -154,7 +154,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
 
-  /instruments/{instrumentId}/indicators/{indicator}:
+  /instruments/{instrumentId}/indicators/{indicator}/values:
     get:
       tags: [Indicators]
       operationId: getIndicatorValues
@@ -232,11 +232,43 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AsyncJobResponse"
+                type: object
+                required: [jobId]
+                properties:
+                  jobId:
+                    $ref: "#/components/schemas/JobId"
         "400":
           description: Bad request.
         "404":
           description: Instrument or data provider not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /indicators/value-calculation/jobs/{jobId}/result:
+    get:
+      tags: [Indicators]
+      operationId: getCalculateIndicatorValuesJobResult
+      summary: Get the result of a indicator calculation job.
+      security: []
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema:
+            $ref: "#/components/schemas/JobId"
+      responses:
+        "200":
+          description: Successfully retrieve job result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJobResultResponse"
+        "400":
+          description: Bad request.
+        "404":
+          description: Job not found.
           content:
             application/json:
               schema:
