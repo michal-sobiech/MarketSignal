@@ -1,0 +1,138 @@
+openapi: 3.1.1
+info:
+  title: MarketSignal API
+  version: 1.0.0
+
+components:
+  schemas:
+    IanaTimezone:
+      type: string
+      example: Europe/Warsaw
+
+    DataProvider:
+      type: string
+      example: alphaVantage
+
+    InstrumentId:
+      type: object
+      required: [mic, symbol]
+      properties:
+        mic:
+          type: string
+          example: XNAS
+        symbol:
+          type: string
+          example: AAPL
+
+    AsyncJobResponse:
+      type: object
+      required: [jobId]
+      properties:
+        jobId:
+          type: number
+          format: int64
+
+    PullInstrumentRawDataRequest:
+      type: object
+      required: [instrumentId, dataProvider]
+      properties:
+        instrumentId:
+          $ref: "#/components/schemas/InstrumentId"
+        dataProvider:
+          $ref: "#/components/schemas/DataProvider"
+
+    GetJobResultResponse:
+      oneOf:
+        - $ref: "#/components/schemas/GetJobResultPendingResponse"
+        - $ref: "#/components/schemas/GetJobResultSuccessResponse"
+        - $ref: "#/components/schemas/GetJobResultFailureResponse"
+      discriminator:
+        propertyName: status
+        mapping:
+          pending: "#/components/schemas/GetJobResultPendingResponse"
+          success: "#/components/schemas/GetJobResultSuccessResponse"
+          failure: "#/components/schemas/GetJobResultFailureResponse"
+
+    GetJobResultPendingResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [pending]
+
+    GetJobResultSuccessResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [success]
+
+    GetJobResultFailureResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [failure]
+        message:
+          type: string
+
+    CalcIndicatorRequest:
+      type: object
+      required: [instrumentId, dataProvider]
+      properties:
+        instrumentId:
+          $ref: "#/components/schemas/InstrumentId"
+        dataProvider:
+          $ref: "#/components/schemas/DataProvider"
+
+    GetIndicatorRequest:
+      type: object
+      required: [instrumentId, indicator, timezone, from, to]
+      properties:
+        instrumentId:
+          $ref: "#/components/schemas/InstrumentId"
+        indicator:
+          type: string
+          example: SMA_7
+        timezone:
+          $ref: "#/components/schemas/IanaTimezone"
+        from:
+          type: string
+          format: date
+        to:
+          type: string
+          format: date
+
+    GetIndicatorResponse:
+      type: object
+      required: [rows]
+      properties:
+        rows:
+          type: array
+          items:
+            type: object
+            required: [time, value]
+            properties:
+              time:
+                type: string
+                format: date-time
+              value:
+                type: number
+                format: double
+
+paths:
+  /symbols/{symbol}/raw-data/pull:
+    post:
+      tags: [Symbols]
+      operationId: pullSymbolRawData
+      summary: Downloads new raw data about the symbol from an external source and stores it locally.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/"
