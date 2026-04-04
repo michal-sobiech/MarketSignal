@@ -168,18 +168,23 @@ paths:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
 
-  /indicators/{indicator}:
+  /instruments/{instrumentId}/indicators/{indicator}:
     get:
       tags: [Indicators]
       operationId: getIndicatorValues
       summary: get indicator values for chosen instrument, data provider and time range.
       security: []
       parameters:
-        - in: query
+        - in: path
           name: instrumentId
           required: true
           schema:
             $ref: "#/components/schemas/InstrumentId"
+        - in: path
+          name: indicator
+          required: true
+          schema:
+            type: string
         - in: query
           name: dataProvider
           required: true
@@ -203,7 +208,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AsyncJobResponse"
+                $ref: "#/components/schemas/GetIndicatorRequest"
         "400":
           description: Bad request.
         "404":
@@ -212,3 +217,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
+
+  /indicators/{indicator}/calculate:
+    post:
