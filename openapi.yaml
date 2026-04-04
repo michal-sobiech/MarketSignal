@@ -273,3 +273,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
+
+  /external-data/pull/jobs/{jobId}/result:
+    get:
+      tags: [ExternalData]
+      operationId: getExternalDataPullJobResult
+      summary: Get the result of a external data pull job.
+      security: []
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema:
+            $ref: "#/components/schemas/JobId"
+      responses:
+        "200":
+          description: Successfully retrieve job result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJobResultResponse"
+        "400":
+          description: Bad request.
+        "404":
+          description: Job not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
