@@ -152,7 +152,52 @@ paths:
               schema:
                 $ref: "#/components/schemas/AsyncJobResponse"
         "400":
-          description: Bad request
+          description: Bad request.
+        "404":
+          description: Instrument or data provider not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /indicators/{indicator}:
+    get:
+      tags: [Indicators]
+      operationId: getIndicatorValues
+      summary: get indicator values for chosen instrument, data provider and time range.
+      security: []
+      parameters:
+        - in: query
+          name: instrumentId
+          required: true
+          schema:
+            $ref: "#/components/schemas/InstrumentId"
+        - in: query
+          name: dataProvider
+          required: true
+          schema:
+            $ref: "#/components/schemas/DataProvider"
+        - in: query
+          name: from
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Successfully retrieve indicator values.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AsyncJobResponse"
+        "400":
+          description: Bad request.
         "404":
           description: Instrument or data provider not found.
           content:
