@@ -13,6 +13,10 @@ components:
       type: string
       example: alphaVantage
 
+    Indicator:
+      type: string
+      example: SMA_7
+
     MessageResponse:
       type: object
       required: [message]
@@ -78,7 +82,7 @@ components:
         message:
           type: string
 
-    CalcIndicatorRequest:
+    CalcIndicatorValuesRequest:
       type: object
       required: [instrumentId, dataProvider]
       properties:
@@ -87,25 +91,7 @@ components:
         dataProvider:
           $ref: "#/components/schemas/DataProvider"
 
-    GetIndicatorRequest:
-      type: object
-      required: [instrumentId, indicator, timezone, from, to]
-      properties:
-        instrumentId:
-          $ref: "#/components/schemas/InstrumentId"
-        indicator:
-          type: string
-          example: SMA_7
-        timezone:
-          $ref: "#/components/schemas/IanaTimezone"
-        from:
-          type: string
-          format: date
-        to:
-          type: string
-          format: date
-
-    GetIndicatorResponse:
+    GetIndicatorValuesResponse:
       type: object
       required: [rows]
       properties:
@@ -184,7 +170,7 @@ paths:
           name: indicator
           required: true
           schema:
-            type: string
+            $ref: "#/components/schemas/Indicator"
         - in: query
           name: dataProvider
           required: true
@@ -208,7 +194,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetIndicatorRequest"
+                $ref: "#/components/schemas/GetIndicatorValuesResponse"
         "400":
           description: Bad request.
         "404":
@@ -218,5 +204,40 @@ paths:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
 
-  /indicators/{indicator}/calculate:
+  /instruments/{instrumentId}/indicators/{indicator}/calculate-values:
     post:
+      tags: [Indicators]
+      operationId: calculateIndicatorValues
+      summary: calculate indicator values for chosen instrument and data provider.
+      security: []
+      parameters:
+        - in: path
+          name: instrumentId
+          required: true
+          schema:
+            $ref: "#/components/schemas/InstrumentId"
+        - in: path
+          name: indicator
+          required: true
+          schema:
+            $ref: "#/components/schemas/Indicator"
+        - in: query
+          name: dataProvider
+          required: true
+          schema:
+            $ref: "#/components/schemas/DataProvider"
+      responses:
+        "200":
+          description: Successfully start a calculation job.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AsyncJobResponse"
+        "400":
+          description: Bad request.
+        "404":
+          description: Instrument or data provider not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
