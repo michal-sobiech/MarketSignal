@@ -40,15 +40,6 @@ components:
           type: number
           format: int64
 
-    PullInstrumentRawDataRequest:
-      type: object
-      required: [instrumentId, dataProvider]
-      properties:
-        instrumentId:
-          $ref: "#/components/schemas/InstrumentId"
-        dataProvider:
-          $ref: "#/components/schemas/DataProvider"
-
     GetJobResultResponse:
       oneOf:
         - $ref: "#/components/schemas/GetJobResultPendingResponse"
@@ -138,12 +129,29 @@ paths:
       operationId: pullInstrumentRawData
       summary: Downloads new raw data about the instrument from an external source and stores it locally.
       security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PullInstrumentRawDataRequest"
+      parameters:
+        - in: query
+          name: instrumentId
+          required: true
+          schema:
+            $ref: "#/components/schemas/InstrumentId"
+        - in: query
+          name: dataProvider
+          required: true
+          schema:
+            $ref: "#/components/schemas/DataProvider"
+        - in: query
+          name: from
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         "202":
           description: Successfully started a job.
