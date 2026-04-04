@@ -13,6 +13,14 @@ components:
       type: string
       example: alphaVantage
 
+    MessageResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          example: Data provider not found.
+
     InstrumentId:
       type: object
       required: [mic, symbol]
@@ -124,15 +132,30 @@ components:
                 format: double
 
 paths:
-  /symbols/{symbol}/raw-data/pull:
+  /instruments/{instrumentId}/raw-data/pull:
     post:
-      tags: [Symbols]
-      operationId: pullSymbolRawData
-      summary: Downloads new raw data about the symbol from an external source and stores it locally.
+      tags: [Instruments]
+      operationId: pullInstrumentRawData
+      summary: Downloads new raw data about the instrument from an external source and stores it locally.
       security: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/"
+              $ref: "#/components/schemas/PullInstrumentRawDataRequest"
+      responses:
+        "202":
+          description: Successfully started a job.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AsyncJobResponse"
+        "400":
+          description: Bad request
+        "404":
+          description: Instrument or data provider not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
