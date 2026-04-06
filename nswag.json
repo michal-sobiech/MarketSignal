@@ -1,0 +1,14 @@
+{
+    "runtime": "Net80",
+    "documentGenerator": {
+        "fromDocument": {
+            "url": "openapi.yaml"
+        }
+    },
+    "codeGenerators": {
+        "openApiToCSharpController": {
+            "output": "src/MarketSignal.Api/Generated/Controllers.cs",
+            "controllerTarget": "AspNetCore"
+        }
+    }
+}
