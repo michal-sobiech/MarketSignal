@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A323D31C-BA8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketSignal.Api", "src\MarketSignal.Api\MarketSignal.Api.csproj", "{FDE8CEDD-71D5-4AA3-A724-2A4729033336}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketSignal.Application", "src\MarketSignal.Application\MarketSignal.Application.csproj", "{07069CD4-C1A0-405A-B457-E0699E3046F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,13 @@ Global
 		{FDE8CEDD-71D5-4AA3-A724-2A4729033336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDE8CEDD-71D5-4AA3-A724-2A4729033336}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDE8CEDD-71D5-4AA3-A724-2A4729033336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07069CD4-C1A0-405A-B457-E0699E3046F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07069CD4-C1A0-405A-B457-E0699E3046F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07069CD4-C1A0-405A-B457-E0699E3046F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07069CD4-C1A0-405A-B457-E0699E3046F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FDE8CEDD-71D5-4AA3-A724-2A4729033336} = {A323D31C-BA88-4F64-BC9C-E383DAE3431B}
+		{07069CD4-C1A0-405A-B457-E0699E3046F0} = {A323D31C-BA88-4F64-BC9C-E383DAE3431B}
 	EndGlobalSection
 EndGlobal
