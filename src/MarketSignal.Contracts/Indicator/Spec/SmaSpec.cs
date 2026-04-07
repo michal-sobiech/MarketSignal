@@ -1,3 +1,5 @@
 namespace MarketSignal.Contracts.Indicator.Spec;
 
-public sealed record SmaSpec(int WindowLength);
+public sealed record SmaSpec(
+    int WindowLength
+);
