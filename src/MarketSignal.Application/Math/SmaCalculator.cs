@@ -1,7 +1,7 @@
-namespace MarketSignal.Application.Sma;
+namespace MarketSignal.Application.Math;
 
-public class SmaCalculator {
-    public static IEnumerable<double> CalculateSma(List<double> values, int windowLength) {
+public class SimpleMovingAverageCalculator {
+    public static IEnumerable<double> CalculateSimpleMovingAverage(List<double> values, int windowLength) {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(windowLength, nameof(windowLength));
 
         List<double> output = [];
