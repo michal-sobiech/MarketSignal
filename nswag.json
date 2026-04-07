@@ -8,7 +8,8 @@
     "codeGenerators": {
         "openApiToCSharpController": {
             "output": "src/MarketSignal.Api/Generated/Controllers.cs",
-            "controllerTarget": "AspNetCore"
+            "controllerTarget": "AspNetCore",
+            "namespace": "MarketSignal.Api.Generated"
         }
     }
 }
