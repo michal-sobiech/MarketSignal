@@ -1,8 +1,9 @@
 using MarketSignal.Contracts;
+using MarketSignal.Contracts.RawData;
 
 using NodaTime;
 
-namespace MarketSignal.Application;
+namespace MarketSignal.Application.RawData;
 
 public class InstrumentRawDataUpdater(
     IInstrumentRawDataProvider instrumentRawDataProvider,
