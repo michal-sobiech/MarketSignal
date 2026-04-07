@@ -8,17 +8,17 @@ namespace MarketSignal.Worker;
 
 public class RedisJobQueueConsumer(
     IConnectionMultiplexer connectionMultiplexer,
-    Duration period
+    Duration period,
+    string queueKey
 ) : IJobQueueConsumer {
 
     private readonly IDatabase _database = connectionMultiplexer.GetDatabase();
     private readonly Duration _period = period;
-
-    private const string QueueKey = "jobs";
+    private readonly string _queueKey = queueKey;
 
     public async Task<Guid> DequeueJob() {
         while (true) {
-            RedisValue value = await _database.ListRightPopAsync(QueueKey);
+            RedisValue value = await _database.ListRightPopAsync(_queueKey);
             if (!value.IsNullOrEmpty) {
                 return Guid.Parse(value!);
             }
