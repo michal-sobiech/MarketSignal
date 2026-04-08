@@ -20,7 +20,7 @@ public class SmaUpdater(
     public async Task UpdateSma(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         InstrumentRawDataField rawDataField,
-        int windowLength
+        int period
     ) {
         var smaMissingTimeRange = await getMissingIndicatorTimeRange(instrumentIndicatorSpec);
         if (smaMissingTimeRange is null) {
@@ -28,7 +28,7 @@ public class SmaUpdater(
         }
         var (missingSmaFrom, missingSmaTo) = smaMissingTimeRange.Value;
 
-        Instant rawDataFrom = missingSmaFrom - Duration.FromDays(windowLength);
+        Instant rawDataFrom = missingSmaFrom - Duration.FromDays(period);
         IEnumerable<InstrumentRawDataRow> rawData = (await _rawDataService.FetchByTimeRange(
             instrumentIndicatorSpec.InstrumentSpec,
             rawDataFrom,
@@ -44,7 +44,7 @@ public class SmaUpdater(
 
         IEnumerable<double> smaValues = _simpleMovingAverageCalculator.CalculateSimpleMovingAverage(
             rawDataFieldValues,
-            windowLength);
+            period);
 
         IEnumerable<IndicatorRow> smaRows = times.Zip(
             smaValues,
