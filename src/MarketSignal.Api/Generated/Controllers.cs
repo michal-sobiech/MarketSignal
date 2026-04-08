@@ -48,7 +48,7 @@ namespace MarketSignal.Api.Generated
 
         /// <returns>Successfully retrieve indicator values.</returns>
 
-        System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValuesAsync(InstrumentId instrumentId, string indicator, string dataProvider, System.DateTimeOffset? from, System.DateTimeOffset? to);
+        System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValuesAsync(InstrumentId instrumentId, Indicator indicator, string dataProvider, System.DateTimeOffset? from, System.DateTimeOffset? to);
 
         /// <summary>
         /// calculate indicator values for chosen instrument and data provider.
@@ -58,7 +58,7 @@ namespace MarketSignal.Api.Generated
 
         /// <returns>Successfully start a calculation job.</returns>
 
-        System.Threading.Tasks.Task<Response2> CalculateIndicatorValuesAsync(InstrumentId instrumentId, string indicator, string dataProvider);
+        System.Threading.Tasks.Task<Response2> CalculateIndicatorValuesAsync(InstrumentId instrumentId, Indicator indicator, string dataProvider);
 
         /// <summary>
         /// Get the result of a indicator calculation job.
@@ -107,7 +107,7 @@ namespace MarketSignal.Api.Generated
         /// </summary>
         /// <returns>Successfully retrieve indicator values.</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("instruments/{instrumentId}/indicators/{indicator}/values")]
-        public System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValues(InstrumentId instrumentId, string indicator, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? from, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? to)
+        public System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValues(InstrumentId instrumentId, Indicator indicator, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? from, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? to)
         {
 
             return _implementation.GetIndicatorValuesAsync(instrumentId, indicator, dataProvider, from, to);
@@ -118,7 +118,7 @@ namespace MarketSignal.Api.Generated
         /// </summary>
         /// <returns>Successfully start a calculation job.</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("instruments/{instrumentId}/indicators/{indicator}/calculate-values")]
-        public System.Threading.Tasks.Task<Response2> CalculateIndicatorValues(InstrumentId instrumentId, string indicator, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider)
+        public System.Threading.Tasks.Task<Response2> CalculateIndicatorValues(InstrumentId instrumentId, Indicator indicator, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider)
         {
 
             return _implementation.CalculateIndicatorValuesAsync(instrumentId, indicator, dataProvider);
@@ -144,6 +144,29 @@ namespace MarketSignal.Api.Generated
         {
 
             return _implementation.GetExternalDataPullJobResultAsync(jobId);
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Indicator
+    {
+
+        [Newtonsoft.Json.JsonProperty("indicatorKind", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public IndicatorKind IndicatorKind { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("windowLength", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double WindowLength { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
         }
 
     }
@@ -330,6 +353,15 @@ namespace MarketSignal.Api.Generated
             get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
             set { _additionalProperties = value; }
         }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum IndicatorKind
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SMA")]
+        SMA = 0,
 
     }
 

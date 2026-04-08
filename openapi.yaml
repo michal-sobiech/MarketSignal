@@ -14,8 +14,23 @@ components:
       example: alphaVantage
 
     Indicator:
-      type: string
-      example: SMA_7
+      oneOf:
+        - $ref: "#/components/schemas/SmaIndicator"
+      discriminator:
+        propertyName: indicatorKind
+        mapping:
+          SMA: "#/components/schemas/SmaIndicator"
+
+    SmaIndicator:
+      type: object
+      required: [indicatorKind, args]
+      properties:
+        indicatorKind:
+          type: string
+          enum: [SMA]
+        windowLength:
+          type: number
+          format: int32
 
     MessageResponse:
       type: object
