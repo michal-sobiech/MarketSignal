@@ -7,7 +7,7 @@ public interface IIndicatorRepository {
 
     public Task SaveMany(InstrumentIndicatorSpec indicatorSpec, IEnumerable<IndicatorRow> rows);
 
-    public Task<IEnumerable<IndicatorRowStored>> FetchByTimeRange(
+    public Task<IEnumerable<IndicatorRowEntity>> FetchByTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         Instant fromInclusive,
         Instant toInclusive);

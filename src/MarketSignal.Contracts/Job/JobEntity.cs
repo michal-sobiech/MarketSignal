@@ -1,11 +1,13 @@
+using MarketSignal.Contracts.Job.Payload;
+
 namespace MarketSignal.Contracts.Job;
 
 public record JobEntity(
     Guid JobId,
-    JobKind Kind,
-    JobStatus Status
+    JobStatus JobStatus,
+    JobPayload JobPayload
 ) {
-    public static JobEntity createNew(Guid jobId, JobKind kind) {
-        return new JobEntity(jobId, kind, JobStatus.PENDING);
+    public static JobEntity CreateNew(Guid jobId, JobPayload payload) {
+        return new JobEntity(jobId, JobStatus.PENDING, payload);
     }
 }

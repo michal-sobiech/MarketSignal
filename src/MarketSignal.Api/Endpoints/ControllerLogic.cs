@@ -1,21 +1,24 @@
 using MarkeSignal.Infrastructure.Job;
 
 using MarketSignal.Api.Generated;
+using MarketSignal.Application;
 using MarketSignal.Application.RawData;
+using MarketSignal.Contracts.Indicator;
+using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Store;
 
 namespace MarketSignal.Api.Endpoints;
 
 public class ControllerLogic(
-    InstrumentRawDataUpdater instrumentRawDataUpdater,
     IJobQueueProducer jobQueueProducer,
-    IJobStore jobStore
+    IJobStore jobStore,
+    IndicatorService indicatorService
 ) : IController {
 
-    private readonly InstrumentRawDataUpdater _instrumentRawDataUpdater = instrumentRawDataUpdater;
     private readonly IJobQueueProducer _jobQueueProducer = jobQueueProducer;
     private readonly IJobStore _jobStore = jobStore;
+    private readonly IndicatorService _indicatorService = indicatorService;
 
     public Task<Response> PullInstrumentRawDataAsync(
         InstrumentId instrumentId,
@@ -40,7 +43,14 @@ public class ControllerLogic(
         DateTimeOffset? from,
         DateTimeOffset? to
     ) {
+        IIndicatorSpec indicatorSpec =
 
+        InstrumentIndicatorSpec instrumentIndicatorSpec = new() {
+            IndicatorSpec = new IIndicatorSpec() {
+
+            }
+        }
+        _indicatorService.
     }
 
     public Task<Response2> CalculateIndicatorValuesAsync(
