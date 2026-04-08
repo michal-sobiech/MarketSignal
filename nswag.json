@@ -9,7 +9,8 @@
         "openApiToCSharpController": {
             "output": "src/MarketSignal.Api/Generated/Controllers.cs",
             "controllerTarget": "AspNetCore",
-            "namespace": "MarketSignal.Api.Generated"
+            "namespace": "MarketSignal.Api.Generated",
+            "discriminatorName": "type"
         }
     }
 }

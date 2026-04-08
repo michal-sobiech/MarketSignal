@@ -9,40 +9,30 @@ components:
       type: string
       example: Europe/Warsaw
 
-    DataProvider:
+    MarketSymbol:
+      type: string
+      example: AAPL
+
+    MarketIdCode:
+      type: string
+      example: XNAS
+
+    MarketDataProvider:
       type: string
       example: alphaVantage
 
+    # Usually this would be done using `oneOf` and `discriminator` fields, but
+    # none of the more popular OpenApi .NET controller generators handle that well.
+    # This is a workaround.
     Indicator:
-      oneOf:
-        - $ref: "#/components/schemas/SmaIndicator"
-        - $ref: "#/components/schemas/RsiIndicator"
-      discriminator:
-        propertyName: indicatorKind
-        mapping:
-          SMA: "#/components/schemas/SmaIndicator"
-          RSI: "#/components/schemas/RsiIndicator"
-
-    SmaIndicator:
       type: object
-      required: [indicatorKind, args]
+      required: [kind]
       properties:
-        indicatorKind:
+        kind:
           type: string
-          enum: [SMA]
+          enum: [SMA, RSI]
         period:
-          type: number
-          format: int32
-
-    RsiIndicator:
-      type: object
-      required: [indicatorKind, args]
-      properties:
-        indicatorKind:
-          type: string
-          enum: [RSI]
-        period:
-          type: number
+          type: integer
           format: int32
 
     MessageResponse:
@@ -55,14 +45,14 @@ components:
 
     InstrumentId:
       type: object
-      required: [mic, symbol]
+      required: [mic, symbol, dataProvider]
       properties:
-        mic:
-          type: string
-          example: XNAS
         symbol:
-          type: string
-          example: AAPL
+          $ref: "#/components/schemas/MarketSymbol"
+        mic:
+          $ref: "#/components/schemas/MarketIdCode"
+        dataProvider:
+          $ref: "#/components/schemas/MarketDataProvider"
 
     JobId:
       type: string
@@ -112,7 +102,7 @@ components:
         instrumentId:
           $ref: "#/components/schemas/InstrumentId"
         dataProvider:
-          $ref: "#/components/schemas/DataProvider"
+          $ref: "#/components/schemas/MarketDataProvider"
 
     GetIndicatorValuesResponse:
       type: object
@@ -132,7 +122,7 @@ components:
                 format: double
 
 paths:
-  /instruments/{instrumentId}/raw-data/pull:
+  /instruments/raw-data/pull:
     post:
       tags: [Instruments]
       operationId: pullInstrumentRawData
@@ -140,15 +130,20 @@ paths:
       security: []
       parameters:
         - in: query
-          name: instrumentId
+          name: symbol
           required: true
           schema:
-            $ref: "#/components/schemas/InstrumentId"
+            $ref: "#/components/schemas/MarketSymbol"
+        - in: query
+          name: mic
+          required: true
+          schema:
+            $ref: "#/components/schemas/MarketIdCode"
         - in: query
           name: dataProvider
           required: true
           schema:
-            $ref: "#/components/schemas/DataProvider"
+            $ref: "#/components/schemas/MarketDataProvider"
         - in: query
           name: from
           required: false
@@ -181,7 +176,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
 
-  /instruments/{instrumentId}/indicators/{indicator}/values:
+  /instruments/indicators/{indicator}/values:
     get:
       tags: [Indicators]
       operationId: getIndicatorValues
@@ -202,7 +197,7 @@ paths:
           name: dataProvider
           required: true
           schema:
-            $ref: "#/components/schemas/DataProvider"
+            $ref: "#/components/schemas/MarketDataProvider"
         - in: query
           name: from
           required: false
@@ -210,7 +205,7 @@ paths:
             type: string
             format: date-time
         - in: query
-          name: to
+          name: tMarketo
           required: false
           schema:
             type: string
@@ -252,7 +247,7 @@ paths:
           name: dataProvider
           required: true
           schema:
-            $ref: "#/components/schemas/DataProvider"
+            $ref: "#/components/schemas/MarketDataProvider"
       responses:
         "200":
           description: Successfully start a calculation job.

@@ -34,9 +34,11 @@ namespace MarketSignal.Api.Generated
 
 
 
+
+
         /// <returns>Successfully started a job.</returns>
 
-        System.Threading.Tasks.Task<Response> PullInstrumentRawDataAsync(InstrumentId instrumentId, string dataProvider, System.DateTimeOffset? from, System.DateTimeOffset? to);
+        System.Threading.Tasks.Task<Response> PullInstrumentRawDataAsync(string symbol, string mic, string dataProvider, System.DateTimeOffset? from, System.DateTimeOffset? to);
 
         /// <summary>
         /// get indicator values for chosen instrument, data provider and time range.
@@ -48,7 +50,7 @@ namespace MarketSignal.Api.Generated
 
         /// <returns>Successfully retrieve indicator values.</returns>
 
-        System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValuesAsync(InstrumentId instrumentId, Indicator indicator, string dataProvider, System.DateTimeOffset? from, System.DateTimeOffset? to);
+        System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValuesAsync(InstrumentId instrumentId, Indicator indicator, string dataProvider, System.DateTimeOffset? from, System.DateTimeOffset? tMarketo);
 
         /// <summary>
         /// calculate indicator values for chosen instrument and data provider.
@@ -95,22 +97,22 @@ namespace MarketSignal.Api.Generated
         /// Downloads new raw data about the instrument from an external source and stores it locally.
         /// </summary>
         /// <returns>Successfully started a job.</returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("instruments/{instrumentId}/raw-data/pull")]
-        public System.Threading.Tasks.Task<Response> PullInstrumentRawData([Microsoft.AspNetCore.Mvc.FromQuery] InstrumentId instrumentId, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? from, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? to)
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("instruments/raw-data/pull")]
+        public System.Threading.Tasks.Task<Response> PullInstrumentRawData([Microsoft.AspNetCore.Mvc.FromQuery] string symbol, [Microsoft.AspNetCore.Mvc.FromQuery] string mic, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? from, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? to)
         {
 
-            return _implementation.PullInstrumentRawDataAsync(instrumentId, dataProvider, from, to);
+            return _implementation.PullInstrumentRawDataAsync(symbol, mic, dataProvider, from, to);
         }
 
         /// <summary>
         /// get indicator values for chosen instrument, data provider and time range.
         /// </summary>
         /// <returns>Successfully retrieve indicator values.</returns>
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("instruments/{instrumentId}/indicators/{indicator}/values")]
-        public System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValues(InstrumentId instrumentId, Indicator indicator, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? from, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? to)
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("instruments/indicators/{indicator}/values")]
+        public System.Threading.Tasks.Task<GetIndicatorValuesResponse> GetIndicatorValues(InstrumentId instrumentId, Indicator indicator, [Microsoft.AspNetCore.Mvc.FromQuery] string dataProvider, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? from, [Microsoft.AspNetCore.Mvc.FromQuery] System.DateTimeOffset? tMarketo)
         {
 
-            return _implementation.GetIndicatorValuesAsync(instrumentId, indicator, dataProvider, from, to);
+            return _implementation.GetIndicatorValuesAsync(instrumentId, indicator, dataProvider, from, tMarketo);
         }
 
         /// <summary>
@@ -152,36 +154,13 @@ namespace MarketSignal.Api.Generated
     public partial class Indicator
     {
 
-        [Newtonsoft.Json.JsonProperty("indicatorKind", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("kind", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public IndicatorKind IndicatorKind { get; set; }
+        public IndicatorKind Kind { get; set; }
 
         [Newtonsoft.Json.JsonProperty("period", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double Period { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class RsiIndicator
-    {
-
-        [Newtonsoft.Json.JsonProperty("indicatorKind", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public RsiIndicatorIndicatorKind IndicatorKind { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("period", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double Period { get; set; }
+        public int Period { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -217,13 +196,17 @@ namespace MarketSignal.Api.Generated
     public partial class InstrumentId
     {
 
+        [Newtonsoft.Json.JsonProperty("symbol", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Symbol { get; set; }
+
         [Newtonsoft.Json.JsonProperty("mic", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Mic { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("symbol", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("dataProvider", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Symbol { get; set; }
+        public string DataProvider { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -386,14 +369,8 @@ namespace MarketSignal.Api.Generated
         [System.Runtime.Serialization.EnumMember(Value = @"SMA")]
         SMA = 0,
 
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RsiIndicatorIndicatorKind
-    {
-
         [System.Runtime.Serialization.EnumMember(Value = @"RSI")]
-        RSI = 0,
+        RSI = 1,
 
     }
 
