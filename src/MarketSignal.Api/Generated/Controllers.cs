@@ -67,7 +67,7 @@ namespace MarketSignal.Api.Generated
 
         /// <returns>Successfully retrieve job result</returns>
 
-        System.Threading.Tasks.Task<GetJobResultResponse> GetCalculateIndicatorValuesJobResultAsync(double jobId);
+        System.Threading.Tasks.Task<GetJobResultResponse> GetCalculateIndicatorValuesJobResultAsync(string jobId);
 
         /// <summary>
         /// Get the result of a external data pull job.
@@ -76,7 +76,7 @@ namespace MarketSignal.Api.Generated
 
         /// <returns>Successfully retrieve job result</returns>
 
-        System.Threading.Tasks.Task<GetJobResultResponse> GetExternalDataPullJobResultAsync(double jobId);
+        System.Threading.Tasks.Task<GetJobResultResponse> GetExternalDataPullJobResultAsync(string jobId);
 
     }
 
@@ -129,7 +129,7 @@ namespace MarketSignal.Api.Generated
         /// </summary>
         /// <returns>Successfully retrieve job result</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("indicators/value-calculation/jobs/{jobId}/result")]
-        public System.Threading.Tasks.Task<GetJobResultResponse> GetCalculateIndicatorValuesJobResult(double jobId)
+        public System.Threading.Tasks.Task<GetJobResultResponse> GetCalculateIndicatorValuesJobResult(string jobId)
         {
 
             return _implementation.GetCalculateIndicatorValuesJobResultAsync(jobId);
@@ -140,7 +140,7 @@ namespace MarketSignal.Api.Generated
         /// </summary>
         /// <returns>Successfully retrieve job result</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("external-data/pull/jobs/{jobId}/result")]
-        public System.Threading.Tasks.Task<GetJobResultResponse> GetExternalDataPullJobResult(double jobId)
+        public System.Threading.Tasks.Task<GetJobResultResponse> GetExternalDataPullJobResult(string jobId)
         {
 
             return _implementation.GetExternalDataPullJobResultAsync(jobId);
@@ -300,7 +300,8 @@ namespace MarketSignal.Api.Generated
     {
 
         [Newtonsoft.Json.JsonProperty("jobId", Required = Newtonsoft.Json.Required.Always)]
-        public double JobId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string JobId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -318,7 +319,8 @@ namespace MarketSignal.Api.Generated
     {
 
         [Newtonsoft.Json.JsonProperty("jobId", Required = Newtonsoft.Json.Required.Always)]
-        public double JobId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string JobId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 

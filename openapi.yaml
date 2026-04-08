@@ -37,8 +37,7 @@ components:
           example: AAPL
 
     JobId:
-      type: number
-      format: int64
+      type: string
 
     GetJobResultResponse:
       oneOf:
