@@ -5,7 +5,7 @@ using NodaTime;
 
 namespace MarketSignal.Contracts.Indicator;
 
-public record IndicatorRowStored(
+public record IndicatorRowEntity(
     long RowId,
     IIndicatorSpec IndicatorSpec,
     DataProviderKind DataProviderKind,
