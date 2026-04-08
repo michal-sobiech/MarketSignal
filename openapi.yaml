@@ -16,10 +16,12 @@ components:
     Indicator:
       oneOf:
         - $ref: "#/components/schemas/SmaIndicator"
+        - $ref: "#/components/schemas/RsiIndicator"
       discriminator:
         propertyName: indicatorKind
         mapping:
           SMA: "#/components/schemas/SmaIndicator"
+          RSI: "#/components/schemas/RsiIndicator"
 
     SmaIndicator:
       type: object
@@ -28,7 +30,18 @@ components:
         indicatorKind:
           type: string
           enum: [SMA]
-        windowLength:
+        period:
+          type: number
+          format: int32
+
+    RsiIndicator:
+      type: object
+      required: [indicatorKind, args]
+      properties:
+        indicatorKind:
+          type: string
+          enum: [RSI]
+        period:
           type: number
           format: int32
 
