@@ -19,4 +19,12 @@ public class IndicatorService(IIndicatorRepository indicatorRepository) {
         return _repository.SaveMany(instrumentIndicatorSpec, rows);
     }
 
+    public Task<IndicatorRowEntity> FetchByTimeRange(
+        InstrumentIndicatorSpec instrumentIndicatorSpec,
+        Instant from,
+        Instant to
+    ) {
+        return _repository.FetchByTimeRange();
+    }
+
 }

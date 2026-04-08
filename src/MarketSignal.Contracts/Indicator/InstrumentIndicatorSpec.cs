@@ -6,14 +6,15 @@ namespace MarketSignal.Contracts.Indicator;
 
 public record InstrumentIndicatorSpec(
     InstrumentSpec InstrumentSpec,
-    IIndicatorSpec IndicatorSpec
+    IndicatorSpec IndicatorSpec
 ) {
-    public static Create(
+    public static InstrumentIndicatorSpec Of(
         string symbol,
         string mic,
         MarketDataProviderKind dataProviderKind,
-        IIndicatorSpec indicatorSpec
+        IndicatorSpec indicatorSpec
     ) {
-        retu
+        InstrumentSpec instrumentSpec = new(symbol, mic, dataProviderKind);
+        return new InstrumentIndicatorSpec(instrumentSpec, indicatorSpec);
     }
 }

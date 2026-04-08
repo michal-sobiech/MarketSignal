@@ -1,4 +1,3 @@
-
 using MarketSignal.Contracts.MarketDataProvider;
 
 namespace MarketSignal.Contracts.Instrument;

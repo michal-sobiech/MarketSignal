@@ -34,8 +34,9 @@ public class InstrumentRawDataController(
     ) {
         MarketDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
 
-        Guid jobId = new();
         InstrumentSpec instrumentSpec = new(symbol, mic, dataProviderKind);
+
+        Guid jobId = new();
         var payload = new UpdateInstrumentRawDataJobPayload(instrumentSpec);
         JobEntity jobEntity = JobEntity.CreateNew(jobId, payload);
 

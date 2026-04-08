@@ -1,7 +1,7 @@
 namespace MarketSignal.Application;
 
 public class KeyValuePairsStringParser {
-    public Dictionary<string, string> ParseKeyValuePairsString(string value) {
+    public Dictionary<string, string> Parse(string value) {
         var output = new Dictionary<string, string>();
 
         foreach (var part in value.Split(',', StringSplitOptions.RemoveEmptyEntries)) {
