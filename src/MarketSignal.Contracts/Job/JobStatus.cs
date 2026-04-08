@@ -1,4 +1,4 @@
-namespace MarkeSignal.Infrastructure.Job;
+namespace MarketSignal.Contracts.Job;
 
 public enum JobStatus {
     SUCCESS,
