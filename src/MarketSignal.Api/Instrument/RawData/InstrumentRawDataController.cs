@@ -1,6 +1,7 @@
 using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
+using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Contracts.MarketDataProvider;
 

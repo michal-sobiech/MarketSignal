@@ -4,6 +4,7 @@ using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
+using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Contracts.MarketDataProvider;
 
