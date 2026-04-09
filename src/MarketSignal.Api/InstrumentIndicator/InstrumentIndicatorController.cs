@@ -16,7 +16,7 @@ using NodaTime;
 namespace MarketSignal.Api.InstrumentIndicator;
 
 [ApiController]
-[Route("/instruments/indicators")]
+[Route("api/instruments/indicators")]
 public class InstrumentIndicatorController(
     IJobQueueProducer jobQueueProducer,
     IJobStore jobStore,

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MarketSignal.Api.Job;
 
 [ApiController]
-[Route("/jobs")]
+[Route("api/jobs")]
 public class InstrumentIndicatorController(
     IJobStore jobStore
 ) : ControllerBase {
