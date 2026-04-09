@@ -2,7 +2,7 @@ using NodaTime;
 
 namespace MarketSignal.Contracts.RawData;
 
-public record InstrumentRawDataRowStored(
+public record InstrumentRawDataRowEntity(
     long Id,
     Instant Time,
     double Open,
