@@ -31,7 +31,7 @@ public class InstrumentRawDataController(
 
         InstrumentSpec instrumentSpec = new(symbol, mic, dataProviderKind);
 
-        Guid jobId = new();
+        Guid jobId = Guid.NewGuid();
         var payload = new UpdateInstrumentRawDataJobPayload(instrumentSpec);
         JobEntity jobEntity = JobEntity.CreateNew(jobId, payload);
 

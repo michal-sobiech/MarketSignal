@@ -75,7 +75,7 @@ public class InstrumentIndicatorController(
 
         var instrumentIndicatorSpec = InstrumentIndicatorSpec.Of(symbol, mic, dataProviderKind, indicatorSpec);
 
-        Guid jobId = new();
+        Guid jobId = Guid.NewGuid();
         var payload = new CalcIndicatorJobPayload(instrumentIndicatorSpec);
         JobEntity jobEntity = JobEntity.CreateNew(jobId, payload);
 

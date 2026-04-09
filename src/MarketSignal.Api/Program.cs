@@ -1,8 +1,11 @@
 using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;
+using MarketSignal.Contracts.Indicator.Spec;
+using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Infrastructure.Indicator;
+using MarketSignal.Infrastructure.Instrument.Spec;
 using MarketSignal.Infrastructure.Job;
 using MarketSignal.Infrastructure.MarketDb;
 
@@ -51,8 +54,11 @@ builder.Services.AddSingleton<IJobStore>(serviceProvider =>
 );
 
 // Services
-builder.Services.AddSingleton<IIndicatorRepository, EfcoreIndicatorRepository>();
-builder.Services.AddSingleton<IndicatorService>();
+builder.Services.AddScoped<IInstrumentSpecRepository, EfcoreInstrumentSpecRepository>();
+builder.Services.AddScoped<IIndicatorSpecRepository, EfcoreIndicatorSpecRepository>();
+builder.Services.AddScoped<IIndicatorRepository, EfcoreIndicatorRepository>();
+builder.Services.AddScoped<IndicatorService>();
+builder.Services.AddSingleton<KeyValuePairsStringParser>();
 
 builder.Services.AddControllers();
 

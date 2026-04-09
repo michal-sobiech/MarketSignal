@@ -20,8 +20,8 @@ public class EfcoreIndicatorRepository(
     private readonly IIndicatorSpecRepository _indicatorSpecRepository = indicatorSpecRepository;
 
     public async Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
-        long instrumentSpecId = _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
-        long indicatorSpecId = _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
+        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
+        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
 
         return await _dbContext.IndicatorRows
             .Where(x => x.InstrumentSpecId == instrumentSpecId && x.IndicatorSpecId == indicatorSpecId)
@@ -30,8 +30,8 @@ public class EfcoreIndicatorRepository(
     }
 
     public async Task SaveMany(InstrumentIndicatorSpec instrumentIndicatorSpec, IEnumerable<IndicatorRow> rows) {
-        long instrumentSpecId = _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
-        long indicatorSpecId = _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
+        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
+        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
 
         List<IndicatorRowEntity> entities = rows
             .Select(row => new IndicatorRowEntity {
@@ -52,8 +52,8 @@ public class EfcoreIndicatorRepository(
         Instant fromInclusive,
         Instant toInclusive
     ) {
-        long instrumentSpecId = _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
-        long indicatorSpecId = _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
+        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
+        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
 
         return await _dbContext.IndicatorRows
             .Where(x =>
