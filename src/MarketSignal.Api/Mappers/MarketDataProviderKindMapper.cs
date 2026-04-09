@@ -1,7 +1,6 @@
+using MarketSignal.Contracts.Instrument.RawData;
 
-using MarketSignal.Contracts.Instrument;
-
-namespace MarketSignal.Api;
+namespace MarketSignal.Api.Mappers;
 
 public class MarketDataProviderKindMapper {
 

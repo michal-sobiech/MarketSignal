@@ -1,4 +1,6 @@
+using MarketSignal.Api.Mappers;
 using MarketSignal.Contracts.Instrument;
+using MarketSignal.Contracts.Instrument.RawData;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Queue;

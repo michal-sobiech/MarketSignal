@@ -1,3 +1,5 @@
+using MarketSignal.Contracts.Instrument.RawData;
+
 namespace MarketSignal.Contracts.Instrument;
 
 public record InstrumentSpec(

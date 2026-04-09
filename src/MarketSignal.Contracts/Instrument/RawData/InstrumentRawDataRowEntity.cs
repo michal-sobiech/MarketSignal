@@ -1,6 +1,6 @@
 using NodaTime;
 
-namespace MarketSignal.Contracts.RawData;
+namespace MarketSignal.Contracts.Instrument.RawData;
 
 public record InstrumentRawDataRowEntity(
     long Id,

@@ -10,6 +10,8 @@ indent_size = 2
 
 # C# files
 [*.cs]
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0130.severity = error
 
 #### Core EditorConfig Options ####
 

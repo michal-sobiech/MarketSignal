@@ -1,11 +1,7 @@
-using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-using MarketSignal.Contracts;
 using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Instrument.RawData;
-using MarketSignal.Contracts.RawData;
 
 using NodaTime;
 

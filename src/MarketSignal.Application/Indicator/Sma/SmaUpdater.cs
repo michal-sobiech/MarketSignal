@@ -1,7 +1,7 @@
 using MarketSignal.Application.Math;
 using MarketSignal.Application.RawData;
 using MarketSignal.Contracts.Indicator;
-using MarketSignal.Contracts.RawData;
+using MarketSignal.Contracts.Instrument.RawData;
 
 using NodaTime;
 

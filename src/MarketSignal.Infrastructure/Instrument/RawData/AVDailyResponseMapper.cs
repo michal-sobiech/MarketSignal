@@ -1,6 +1,6 @@
 using System.Globalization;
 
-using MarketSignal.Contracts.RawData;
+using MarketSignal.Contracts.Instrument.RawData;
 
 using NodaTime;
 using NodaTime.Text;

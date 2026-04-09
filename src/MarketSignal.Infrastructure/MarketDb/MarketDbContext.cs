@@ -1,5 +1,5 @@
 using MarketSignal.Contracts.Indicator;
-using MarketSignal.Contracts.RawData;
+using MarketSignal.Contracts.Instrument.RawData;
 
 using Microsoft.EntityFrameworkCore;
 

@@ -1,8 +1,6 @@
-using MarketSignal.Contracts.Instrument;
-
 using NodaTime;
 
-namespace MarketSignal.Contracts.RawData;
+namespace MarketSignal.Contracts.Instrument.RawData;
 
 public interface IInstrumentRawDataRepository {
     public Task<Instant?> FetchNewestRowTime(InstrumentSpec instrumentSpec);

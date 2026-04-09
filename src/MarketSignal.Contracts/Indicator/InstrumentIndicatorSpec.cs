@@ -1,5 +1,6 @@
 using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Contracts.Instrument;
+using MarketSignal.Contracts.Instrument.RawData;
 
 namespace MarketSignal.Contracts.Indicator;
 

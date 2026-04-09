@@ -1,5 +1,3 @@
-using MarketSignal.Contracts.RawData;
-
 using NodaTime;
 
 namespace MarketSignal.Contracts.Instrument.RawData;

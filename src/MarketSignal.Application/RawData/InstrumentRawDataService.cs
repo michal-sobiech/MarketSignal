@@ -1,5 +1,5 @@
 using MarketSignal.Contracts.Instrument;
-using MarketSignal.Contracts.RawData;
+using MarketSignal.Contracts.Instrument.RawData;
 
 using NodaTime;
 
