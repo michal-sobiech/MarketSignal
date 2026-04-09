@@ -8,13 +8,17 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       MARKET_DB_HOST: marketDatabase
-      MARKET_DB_PORT: 3307
+      MARKET_DB_PORT: 3306
       MARKET_DB_NAME: ${MARKET_DB_NAME}
       MARKET_DB_USER_NAME: ${MARKET_DB_USER_NAME}
       MARKET_DB_PASSWORD: ${MARKET_DB_PASSWORD}
       REDIS_HOST: redis
       REDIS_PORT: 6379
-    depends_on: [marketDatabase, redis]
+    depends_on:
+      marketDatabase:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   marketDatabase:
     image: mysql:8.4
@@ -65,10 +69,14 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       MARKET_DB_HOST: marketDatabase
-      MARKET_DB_PORT: 3307
+      MARKET_DB_PORT: 3306
       MARKET_DB_NAME: ${MARKET_DB_NAME}
       MARKET_DB_USER_NAME: ${MARKET_DB_USER_NAME}
       MARKET_DB_PASSWORD: ${MARKET_DB_PASSWORD}
       REDIS_HOST: redis
       REDIS_PORT: 6379
-    depends_on: [marketDatabase, redis]
+    depends_on:
+      marketDatabase:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
