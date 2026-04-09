@@ -7,8 +7,6 @@ using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Contracts.MarketDataProvider;
 
-using Microsoft.AspNetCore.Http.HttpResults;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarketSignal.Api.Instrument.RawData;
@@ -17,13 +15,11 @@ namespace MarketSignal.Api.Instrument.RawData;
 [Route("api/instruments/raw-data")]
 public class InstrumentRawDataController(
     IJobQueueProducer jobQueueProducer,
-    IJobStore jobStore,
-    IndicatorService indicatorService
+    IJobStore jobStore
 ) : ControllerBase {
 
     private readonly IJobQueueProducer _jobQueueProducer = jobQueueProducer;
     private readonly IJobStore _jobStore = jobStore;
-    private readonly IndicatorService _indicatorService = indicatorService;
 
     [HttpPost("pull")]
     [ProducesResponseType(StatusCodes.Status200OK)]
