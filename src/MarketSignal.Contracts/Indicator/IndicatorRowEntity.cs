@@ -7,8 +7,8 @@ namespace MarketSignal.Contracts.Indicator;
 
 public record IndicatorRowEntity(
     long RowId,
-    IndicatorSpec IndicatorSpec,
-    MarketDataProviderKind DataProviderKind,
+    long InstrumentSpecId,
+    long IndicatorSpecId,
     Instant Time,
     double Value
 );
