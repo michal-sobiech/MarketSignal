@@ -1,12 +1,9 @@
 using MarkeSignal.Infrastructure.Job;
 
-using MarketSignal.Api.Job;
-
 using MarketSignal.Api.Mappers;
 using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
-using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Store;
@@ -62,7 +59,7 @@ public class InstrumentIndicatorController(
 
     [HttpPost("calculate-values")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<GetIndicatorValuesResponse> CalcIndicatorValues(
+    public ActionResult<JobIdResponse> CalcIndicatorValues(
         [FromQuery] string symbol,
         [FromQuery] string mic,
         [FromQuery] string dataProvider,
