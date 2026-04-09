@@ -1,5 +1,7 @@
 using System.Text.Json;
 
+using MarketSignal.Contracts.Job;
+
 using MarketSignal.Contracts.Job.Store;
 
 using StackExchange.Redis;
@@ -27,6 +29,11 @@ public class RedisJobStore(
         return serializedJob.IsNullOrEmpty
             ? null
             : JsonSerializer.Deserialize<JobEntity>(serializedJob!);
+    }
+
+    public async Task Delete(Guid jobId) {
+        string key = $"{_queueKey}:{jobId}";
+        await _database.KeyDeleteAsync(key);
     }
 
 }
