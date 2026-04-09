@@ -1,6 +1,3 @@
-using MarketSignal.Contracts.Indicator.Spec;
-using MarketSignal.Contracts.MarketDataProvider;
-
 using NodaTime;
 
 namespace MarketSignal.Contracts.Indicator;
@@ -10,5 +7,5 @@ public record IndicatorRowEntity(
     long InstrumentSpecId,
     long IndicatorSpecId,
     Instant Time,
-    double Value
+    decimal Value
 );

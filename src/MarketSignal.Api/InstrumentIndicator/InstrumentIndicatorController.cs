@@ -1,12 +1,13 @@
+using MarketSignal.Api.Instrument.RawData;
 using MarketSignal.Api.Mappers;
 using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
+using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
-using MarketSignal.Contracts.MarketDataProvider;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,7 +40,7 @@ public class InstrumentIndicatorController(
         [FromQuery] DateTimeOffset from,
         [FromQuery] DateTimeOffset to
     ) {
-        MarketDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
+        InstrumentRawDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
         IndicatorKind indicatorKind = IndicatorKindMapper.FromString(indicatorName);
         Instant fromInstant = Instant.FromDateTimeOffset(from);
         Instant toInstant = Instant.FromDateTimeOffset(to);
@@ -65,7 +66,7 @@ public class InstrumentIndicatorController(
         [FromQuery] string indicatorName,
         [FromQuery] string indicatorArgs
     ) {
-        MarketDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
+        InstrumentRawDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
         IndicatorKind indicatorKind = IndicatorKindMapper.FromString(indicatorName);
 
         var indicatorArgsDict = _keyValuePairsStringParser.Parse(indicatorArgs);

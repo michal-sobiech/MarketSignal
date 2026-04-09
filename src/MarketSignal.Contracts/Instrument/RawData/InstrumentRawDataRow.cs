@@ -4,13 +4,13 @@ namespace MarketSignal.Contracts.RawData;
 
 public record InstrumentRawDataRow(
     Instant Time,
-    double Open,
-    double High,
-    double Low,
-    double Close,
-    double Volume
+    decimal Open,
+    decimal High,
+    decimal Low,
+    decimal Close,
+    decimal Volume
 ) {
-    public double GetValue(InstrumentRawDataField field) =>
+    public decimal GetValue(InstrumentRawDataField field) =>
         field switch {
             InstrumentRawDataField.OPEN => Open,
             InstrumentRawDataField.HIGH => High,

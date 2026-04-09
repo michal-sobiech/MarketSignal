@@ -38,11 +38,11 @@ public class SmaUpdater(
 
         IEnumerable<Instant> times = rawData.Select(row => row.Time);
 
-        List<double> rawDataFieldValues = rawData
+        List<decimal> rawDataFieldValues = rawData
             .Select(row => row.GetValue(rawDataField))
             .ToList();
 
-        IEnumerable<double> smaValues = _simpleMovingAverageCalculator.CalculateSimpleMovingAverage(
+        IEnumerable<decimal> smaValues = _simpleMovingAverageCalculator.CalculateSimpleMovingAverage(
             rawDataFieldValues,
             period);
 

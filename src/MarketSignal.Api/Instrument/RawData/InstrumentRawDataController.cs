@@ -3,7 +3,6 @@ using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
-using MarketSignal.Contracts.MarketDataProvider;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +25,7 @@ public class InstrumentRawDataController(
         [FromQuery] string mic,
         [FromQuery] string dataProvider
     ) {
-        MarketDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
+        InstrumentRawDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
 
         InstrumentSpec instrumentSpec = new(symbol, mic, dataProviderKind);
 
