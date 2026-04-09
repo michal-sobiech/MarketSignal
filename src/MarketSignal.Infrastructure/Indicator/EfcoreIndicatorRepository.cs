@@ -29,9 +29,9 @@ public class EfcoreIndicatorRepository(
             .MaxAsync();
     }
 
-    public async Task SaveMany(InstrumentIndicatorSpec indicatorSpec, IEnumerable<IndicatorRow> rows) {
-        long instrumentSpecId = _instrumentSpecRepository.GetId(indicatorSpec.InstrumentSpec);
-        long indicatorSpecId = _indicatorSpecRepository.GetId(indicatorSpec.IndicatorSpec);
+    public async Task SaveMany(InstrumentIndicatorSpec instrumentIndicatorSpec, IEnumerable<IndicatorRow> rows) {
+        long instrumentSpecId = _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
+        long indicatorSpecId = _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
 
         List<IndicatorRowEntity> entities = rows
             .Select(row => new IndicatorRowEntity(
@@ -47,10 +47,22 @@ public class EfcoreIndicatorRepository(
         await _dbContext.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<IndicatorRowEntity>> FetchByTimeRange(
+    public async Task<IEnumerable<IndicatorRowEntity>> FetchByTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         Instant fromInclusive,
-        Instant toInclusive);
+        Instant toInclusive
+    ) {
+        long instrumentSpecId = _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
+        long indicatorSpecId = _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
 
+        return await _dbContext.IndicatorRows
+            .Where(x =>
+                x.InstrumentSpecId == instrumentSpecId &&
+                x.IndicatorSpecId == indicatorSpecId &&
+                x.Time >= fromInclusive &&
+                x.Time <= toInclusive)
+            .OrderBy(x => x.Time)
+            .ToListAsync();
+    }
 
 }
