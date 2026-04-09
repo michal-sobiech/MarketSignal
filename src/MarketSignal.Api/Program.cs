@@ -1,5 +1,8 @@
+using MarketSignal.Application;
+using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
+using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Job;
 using MarketSignal.Infrastructure.MarketDb;
 
@@ -46,6 +49,10 @@ builder.Services.AddSingleton<IJobStore>(serviceProvider =>
         "jobs"
     )
 );
+
+// Services
+builder.Services.AddSingleton<IIndicatorRepository, EfcoreIndicatorRepository>();
+builder.Services.AddSingleton<IndicatorService>();
 
 builder.Services.AddControllers();
 

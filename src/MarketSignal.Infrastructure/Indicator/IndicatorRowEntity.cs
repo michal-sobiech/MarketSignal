@@ -10,7 +10,7 @@ namespace MarketSignal.Infrastructure.Indicator;
 
 public class IndicatorRowEntity {
     [Key]
-    public long RowId { get; set; }
+    public long Id { get; set; }
     public long InstrumentSpecId { get; set; }
     public long IndicatorSpecId { get; set; }
     public DateTimeOffset Time { get; set; }

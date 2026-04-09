@@ -1,5 +1,5 @@
 namespace MarketSignal.Contracts.Instrument;
 
 public interface IInstrumentSpecRepository {
-    public long GetId(InstrumentSpec instrumentSpec);
+    public Task<long> GetId(InstrumentSpec instrumentSpec);
 }

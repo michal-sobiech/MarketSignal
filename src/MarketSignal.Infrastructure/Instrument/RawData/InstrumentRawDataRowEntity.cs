@@ -10,7 +10,7 @@ namespace MarketSignal.Infrastructure.Instrument.RawData;
 
 public class InstrumentRawDataRowEntity {
     [Key]
-    public long RowId { get; set; }
+    public long Id { get; set; }
     public DateTimeOffset Time { get; set; }
     [Precision(18, 8)] public decimal Open { get; set; }
     [Precision(18, 8)] public decimal High { get; set; }

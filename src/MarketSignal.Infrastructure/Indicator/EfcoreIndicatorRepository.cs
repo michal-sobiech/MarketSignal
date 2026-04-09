@@ -35,7 +35,7 @@ public class EfcoreIndicatorRepository(
 
         List<IndicatorRowEntity> entities = rows
             .Select(row => new IndicatorRowEntity {
-                RowId = 0,
+                Id = 0,
                 InstrumentSpecId = instrumentSpecId,
                 IndicatorSpecId = indicatorSpecId,
                 Time = row.Time.ToDateTimeOffset(),
