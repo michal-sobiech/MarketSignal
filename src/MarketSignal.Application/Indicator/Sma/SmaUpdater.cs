@@ -22,7 +22,7 @@ public class SmaUpdater(
         InstrumentRawDataField rawDataField,
         int period
     ) {
-        var smaMissingTimeRange = await getMissingIndicatorTimeRange(instrumentIndicatorSpec);
+        var smaMissingTimeRange = await GetMissingIndicatorTimeRange(instrumentIndicatorSpec);
         if (smaMissingTimeRange is null) {
             return;
         }
@@ -53,7 +53,7 @@ public class SmaUpdater(
         await _indicatorService.SaveMany(instrumentIndicatorSpec, smaRows);
     }
 
-    private async Task<(Instant from, Instant to)?> getMissingIndicatorTimeRange(
+    private async Task<(Instant from, Instant to)?> GetMissingIndicatorTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec
     ) {
         Instant? newestRawDataRowTime = await _rawDataService.FetchNewestRowTime(instrumentIndicatorSpec.InstrumentSpec);
