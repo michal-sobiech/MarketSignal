@@ -24,7 +24,7 @@ public class IndicatorService(IIndicatorRepository indicatorRepository) {
         Instant from,
         Instant to
     ) {
-        return _repository.FetchByTimeRange();
+        return _repository.FetchByTimeRange(instrumentIndicatorSpec, from, to);
     }
 
 }

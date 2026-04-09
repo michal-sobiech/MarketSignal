@@ -1,6 +1,3 @@
-using MarkeSignal.Infrastructure.Job;
-
-using MarketSignal.Application;
 using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
