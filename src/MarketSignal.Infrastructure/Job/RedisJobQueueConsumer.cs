@@ -1,10 +1,10 @@
-using MarkeSignal.Infrastructure.Job;
+using MarketSignal.Contracts.Job.Queue;
 
 using NodaTime;
 
 using StackExchange.Redis;
 
-namespace MarketSignal.Worker;
+namespace MarketSignal.Infrastructure.Job;
 
 public class RedisJobQueueConsumer(
     IConnectionMultiplexer connectionMultiplexer,

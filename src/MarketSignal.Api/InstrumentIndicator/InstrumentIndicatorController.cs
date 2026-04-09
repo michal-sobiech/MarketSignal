@@ -1,5 +1,3 @@
-using MarkeSignal.Infrastructure.Job;
-
 using MarketSignal.Api.Mappers;
 using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;

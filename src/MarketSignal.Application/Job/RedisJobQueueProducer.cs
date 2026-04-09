@@ -1,6 +1,6 @@
-using StackExchange.Redis;
+using MarketSignal.Contracts.Job.Queue;
 
-namespace MarkeSignal.Infrastructure.Job;
+using StackExchange.Redis;
 
 public class RedisJobQueueProducer(
     IConnectionMultiplexer connectionMultiplexer,
