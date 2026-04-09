@@ -18,10 +18,6 @@ builder.Services.AddSingleton<MarketDbOptions>(_ => new MarketDbOptions {
     Password = Environment.GetEnvironmentVariable("MARKET_DB_PASSWORD") ?? throw new ArgumentException("MARKET_DB_PASSWORD is not set"),
 });
 
-
-// var marketDbOptions = builder.Services.BuildServiceProvider().GetRequiredService<MarketDbOptions>();
-// Console.WriteLine($"DB: Server={marketDbOptions.Host};Port={marketDbOptions.Port};Database={marketDbOptions.DbName};Uid={marketDbOptions.UserName};Pwd={marketDbOptions.Password};AllowPublicKeyRetrieval=True;");
-
 builder.Services.AddDbContext<MarketDbContext>((serviceProvider, options) => {
     var marketDbOptions = serviceProvider.GetRequiredService<MarketDbOptions>();
     string connectionString = $"Server={marketDbOptions.Host};Port={marketDbOptions.Port};Database={marketDbOptions.DbName};Uid={marketDbOptions.UserName};Pwd={marketDbOptions.Password};AllowPublicKeyRetrieval=True;";
