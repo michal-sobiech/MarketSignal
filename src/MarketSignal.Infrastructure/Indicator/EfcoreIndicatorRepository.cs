@@ -25,7 +25,7 @@ public class EfcoreIndicatorRepository(
 
         return await _dbContext.IndicatorRows
             .Where(x => x.InstrumentSpecId == instrumentSpecId && x.IndicatorSpecId == indicatorSpecId)
-            .Select(x => x.Time)
+            .Select(x => Instant.FromDateTimeOffset(x.Time))
             .MaxAsync();
     }
 
@@ -34,20 +34,20 @@ public class EfcoreIndicatorRepository(
         long indicatorSpecId = _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
 
         List<IndicatorRowEntity> entities = rows
-            .Select(row => new IndicatorRowEntity(
-                0,
-                instrumentSpecId,
-                indicatorSpecId,
-                row.Time,
-                row.Value
-            ))
+            .Select(row => new IndicatorRowEntity {
+                RowId = 0,
+                InstrumentSpecId = instrumentSpecId,
+                IndicatorSpecId = indicatorSpecId,
+                Time = row.Time.ToDateTimeOffset(),
+                Value = row.Value
+            })
             .ToList();
 
         await _dbContext.IndicatorRows.AddRangeAsync(entities);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<IndicatorRowEntity>> FetchByTimeRange(
+    public async Task<IEnumerable<IndicatorRow>> FetchByTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         Instant fromInclusive,
         Instant toInclusive
@@ -59,9 +59,10 @@ public class EfcoreIndicatorRepository(
             .Where(x =>
                 x.InstrumentSpecId == instrumentSpecId &&
                 x.IndicatorSpecId == indicatorSpecId &&
-                x.Time >= fromInclusive &&
-                x.Time <= toInclusive)
+                x.Time >= fromInclusive.ToDateTimeOffset() &&
+                x.Time <= toInclusive.ToDateTimeOffset())
             .OrderBy(x => x.Time)
+            .Select(x => x.toDomain())
             .ToListAsync();
     }
 

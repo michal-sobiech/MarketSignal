@@ -20,7 +20,7 @@ public class InstrumentRawDataService(IInstrumentRawDataRepository instrumentRaw
         return _repository.SaveMany(instrumentSpec, rows);
     }
 
-    public Task<IEnumerable<InstrumentRawDataRowEntity>> FetchByTimeRange(
+    public Task<IEnumerable<InstrumentRawDataRow>> FetchByTimeRange(
         InstrumentSpec instrumentSpec,
         Instant fromInclusive,
         Instant toInclusive

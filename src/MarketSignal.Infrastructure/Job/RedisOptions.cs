@@ -1,5 +1,6 @@
-namespace MarketSignal.Worker;
+namespace MarketSignal.Infrastructure.Job;
 
 public class RedisOptions {
-    public string ConnectionString { get; set; } = null!;
+    public string Host { get; set; } = string.Empty;
+    public int Port { get; set; }
 }

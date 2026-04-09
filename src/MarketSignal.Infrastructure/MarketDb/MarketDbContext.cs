@@ -1,7 +1,11 @@
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Instrument.RawData;
+using MarketSignal.Infrastructure.Indicator;
+using MarketSignal.Infrastructure.Instrument.RawData;
 
 using Microsoft.EntityFrameworkCore;
+
+using NodaTime;
 
 namespace MarketSignal.Infrastructure.MarketDb;
 

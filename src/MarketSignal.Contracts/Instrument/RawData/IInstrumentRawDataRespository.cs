@@ -10,7 +10,7 @@ public interface IInstrumentRawDataRepository {
         IEnumerable<InstrumentRawDataRow> rows
     );
 
-    public Task<IEnumerable<InstrumentRawDataRowEntity>> FetchByTimeRange(
+    public Task<IEnumerable<InstrumentRawDataRow>> FetchByTimeRange(
         InstrumentSpec instrumentSpec,
         Instant fromInclusive,
         Instant toInclusive

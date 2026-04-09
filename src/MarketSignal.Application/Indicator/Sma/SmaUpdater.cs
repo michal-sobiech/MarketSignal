@@ -29,12 +29,10 @@ public class SmaUpdater(
         var (missingSmaFrom, missingSmaTo) = smaMissingTimeRange.Value;
 
         Instant rawDataFrom = missingSmaFrom - Duration.FromDays(period);
-        IEnumerable<InstrumentRawDataRow> rawData = (await _rawDataService.FetchByTimeRange(
+        IEnumerable<InstrumentRawDataRow> rawData = await _rawDataService.FetchByTimeRange(
             instrumentIndicatorSpec.InstrumentSpec,
             rawDataFrom,
-            missingSmaTo
-        ))
-            .Select(row => row.ToDomain());
+            missingSmaTo);
 
         IEnumerable<Instant> times = rawData.Select(row => row.Time);
 
