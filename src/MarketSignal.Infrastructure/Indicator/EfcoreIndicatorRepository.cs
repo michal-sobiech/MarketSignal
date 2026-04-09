@@ -29,7 +29,23 @@ public class EfcoreIndicatorRepository(
             .MaxAsync();
     }
 
-    public Task SaveMany(InstrumentIndicatorSpec indicatorSpec, IEnumerable<IndicatorRow> rows);
+    public async Task SaveMany(InstrumentIndicatorSpec indicatorSpec, IEnumerable<IndicatorRow> rows) {
+        long instrumentSpecId = _instrumentSpecRepository.GetId(indicatorSpec.InstrumentSpec);
+        long indicatorSpecId = _indicatorSpecRepository.GetId(indicatorSpec.IndicatorSpec);
+
+        List<IndicatorRowEntity> entities = rows
+            .Select(row => new IndicatorRowEntity(
+                0,
+                instrumentSpecId,
+                indicatorSpecId,
+                row.Time,
+                row.Value
+            ))
+            .ToList();
+
+        await _dbContext.IndicatorRows.AddRangeAsync(entities);
+        await _dbContext.SaveChangesAsync();
+    }
 
     public Task<IEnumerable<IndicatorRowEntity>> FetchByTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
