@@ -20,10 +20,12 @@ public class InstrumentRawDataUpdater(
     }
 
     private async Task<IEnumerable<InstrumentRawDataRow>> FetchNewRows(InstrumentSpec instrumentSpec) {
-        Instant newestSavedRowTime = await _rawDataService.FetchNewestRowTime(instrumentSpec);
+        Instant? newestSavedRowTime = await _rawDataService.FetchNewestRowTime(instrumentSpec);
         Instant now = SystemClock.Instance.GetCurrentInstant();
 
-        return _rawDataProvider.FetchRawData(newestSavedRowTime, now);
+        Instant from = newestSavedRowTime ?? Instant.MaxValue;
+
+        return _rawDataProvider.FetchRawData(from, now);
     }
 
 }

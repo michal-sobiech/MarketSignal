@@ -8,7 +8,7 @@ public class IndicatorService(IIndicatorRepository indicatorRepository) {
 
     private readonly IIndicatorRepository _repository = indicatorRepository;
 
-    public Task<Instant> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
+    public Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
         return _repository.FetchNewestRowTime(instrumentIndicatorSpec);
     }
 
@@ -19,7 +19,7 @@ public class IndicatorService(IIndicatorRepository indicatorRepository) {
         return _repository.SaveMany(instrumentIndicatorSpec, rows);
     }
 
-    public Task<IndicatorRowEntity> FetchByTimeRange(
+    public Task<IEnumerable<IndicatorRowEntity>> FetchByTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         Instant from,
         Instant to

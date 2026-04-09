@@ -56,11 +56,19 @@ public class SmaUpdater(
     private async Task<(Instant from, Instant to)?> getMissingIndicatorTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec
     ) {
-        Instant newestRawDataRowTime = await _rawDataService.FetchNewestRowTime(instrumentIndicatorSpec.InstrumentSpec);
-        Instant newestIndicatorRowTime = await _indicatorService.FetchNewestRowTime(instrumentIndicatorSpec);
+        Instant? newestRawDataRowTime = await _rawDataService.FetchNewestRowTime(instrumentIndicatorSpec.InstrumentSpec);
+        Instant? newestIndicatorRowTime = await _indicatorService.FetchNewestRowTime(instrumentIndicatorSpec);
+
+        if (newestRawDataRowTime is null) {
+            return null;
+        }
+
+        if (newestIndicatorRowTime is null) {
+            return (Instant.MinValue, newestRawDataRowTime.Value);
+        }
 
         return newestIndicatorRowTime < newestRawDataRowTime
-            ? (newestIndicatorRowTime, newestRawDataRowTime)
+            ? (newestIndicatorRowTime.Value, newestRawDataRowTime.Value)
             : null;
     }
 }

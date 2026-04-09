@@ -9,7 +9,7 @@ public class InstrumentRawDataService(IInstrumentRawDataRepository instrumentRaw
 
     private readonly IInstrumentRawDataRepository _repository = instrumentRawDataRepository;
 
-    public Task<Instant> FetchNewestRowTime(InstrumentSpec instrumentSpec) {
+    public Task<Instant?> FetchNewestRowTime(InstrumentSpec instrumentSpec) {
         return _repository.FetchNewestRowTime(instrumentSpec);
     }
 
@@ -20,7 +20,7 @@ public class InstrumentRawDataService(IInstrumentRawDataRepository instrumentRaw
         return _repository.SaveMany(instrumentSpec, rows);
     }
 
-    public Task<IEnumerable<InstrumentRawDataRowStored>> FetchByTimeRange(
+    public Task<IEnumerable<InstrumentRawDataRowEntity>> FetchByTimeRange(
         InstrumentSpec instrumentSpec,
         Instant fromInclusive,
         Instant toInclusive
