@@ -16,5 +16,5 @@ public class IndicatorRowEntity {
     public DateTimeOffset Time { get; set; }
     [Precision(18, 8)] public decimal Value { get; set; }
 
-    public IndicatorRow toDomain() => new(Instant.FromDateTimeOffset(Time), Value);
+    public IndicatorRow ToDomain() => new(Instant.FromDateTimeOffset(Time), Value);
 }

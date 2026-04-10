@@ -48,15 +48,24 @@ public class EfcoreIndicatorRepository(
         Instant fromInclusive,
         Instant toInclusive
     ) {
-        return await _dbContext.IndicatorRows
+        DateTimeOffset? from = fromInclusive == Instant.MinValue
+            ? null
+            : fromInclusive.ToDateTimeOffset();
+
+        DateTimeOffset? to = toInclusive == Instant.MinValue
+            ? null
+            : toInclusive.ToDateTimeOffset();
+
+        var entities = await _dbContext.IndicatorRows
             .Where(x =>
                 x.InstrumentSpecId == instrumentSpecId &&
                 x.IndicatorSpecId == indicatorSpecId &&
-                x.Time >= fromInclusive.ToDateTimeOffset() &&
-                x.Time <= toInclusive.ToDateTimeOffset())
+                (from == null || x.Time >= from) &&
+                (to == null || x.Time <= to))
             .OrderBy(x => x.Time)
-            .Select(x => x.toDomain())
             .ToListAsync();
-    }
 
+        return entities.Select(x => x.ToDomain());
+
+    }
 }

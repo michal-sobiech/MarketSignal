@@ -26,7 +26,7 @@ public class InstrumentRawDataController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public ActionResult<JobIdResponse> UpdateInstrumentRawDataAsync(
+    public async Task<ActionResult<JobIdResponse>> UpdateInstrumentRawDataAsync(
         [FromQuery] string symbol,
         [FromQuery] string mic,
         [FromQuery] string dataProvider
@@ -41,8 +41,8 @@ public class InstrumentRawDataController(
         var payload = new UpdateInstrumentRawDataJobPayload(instrumentSpec);
         JobEntity jobEntity = JobEntity.CreateNew(jobId, payload);
 
-        _jobStore.Save(jobEntity);
-        _jobQueueProducer.EnqueueJob(jobId);
+        await _jobStore.Save(jobEntity);
+        await _jobQueueProducer.EnqueueJob(jobId);
 
         var response = new JobIdResponse(jobId);
         return Ok(response);

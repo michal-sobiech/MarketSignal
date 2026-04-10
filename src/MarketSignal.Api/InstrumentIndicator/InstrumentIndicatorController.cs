@@ -33,6 +33,9 @@ public class InstrumentIndicatorController(
 
     [HttpGet("values")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<GetIndicatorValuesResponse>> GetIndicatorValues(
         [FromQuery] string symbol,
         [FromQuery] string mic,
@@ -47,11 +50,16 @@ public class InstrumentIndicatorController(
         Instant fromInstant = Instant.FromDateTimeOffset(from);
         Instant toInstant = Instant.FromDateTimeOffset(to);
 
-        var rows = await _indicatorService.FetchByTimeRange(
+        var rows = (await _indicatorService.FetchByTimeRange(
             instrumentIndicatorSpec,
             fromInstant,
-            toInstant);
-        return Ok(rows);
+            toInstant))
+            .Select(x => new GetIndicatorValuesResponseRow(x.Time.ToDateTimeOffset(), x.Value))
+            .ToList();
+
+        var response = new GetIndicatorValuesResponse(rows);
+
+        return Ok(response);
     }
 
     [HttpPost("calculate-values")]
@@ -59,7 +67,7 @@ public class InstrumentIndicatorController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public ActionResult<JobIdResponse> CalcIndicatorValues(
+    public async Task<ActionResult<JobIdResponse>> CalcIndicatorValues(
         [FromQuery] string symbol,
         [FromQuery] string mic,
         [FromQuery] string dataProvider,
@@ -72,8 +80,8 @@ public class InstrumentIndicatorController(
         var payload = new CalcIndicatorJobPayload(instrumentIndicatorSpec);
         JobEntity jobEntity = JobEntity.CreateNew(jobId, payload);
 
-        _jobStore.Save(jobEntity);
-        _jobQueueProducer.EnqueueJob(jobId);
+        await _jobStore.Save(jobEntity);
+        await _jobQueueProducer.EnqueueJob(jobId);
 
         var response = new JobIdResponse(jobId);
         return Ok(response);
