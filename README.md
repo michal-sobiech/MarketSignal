@@ -6,6 +6,21 @@ An appliction that calculates market indicators of financial instruments and sto
 ## A bit about the domain
 There is a way to globally identify fincancial instruments: by their symbol and market identification code (MIC). An example of such pair is AAPL, XNAS (Nasdaq). However, this system of identification is not universally accepted. Every data provider (such as Alpha Vantage) has their own system of identifiers. Therefore a mapping must be manually maintained.
 
+Another thing worth mentioning is that two market data providers can have different data about the same instrument. That's why market data provider kind is in the key which identifies an indicator series. The resulting key is comprised of 3 values: symbol, MIC and data provider kind. In the program it's called `InstrumentSpec`.
+
+## Implementation
+The market data provider user here is Alpha Vantage.
+
+The program is divided into multiple projects:
+- `Api`,
+- `Application`
+- `Contracts`
+- `Core`
+- `Infrastructure`
+- `Worker`
+
+There are 2 executables: `Api` and `Worker`. `Api` handles user interaction and performs simple tasks, such as database fetch. `Worker` performs potentially time-consuming tasks, such as indicator caluclations. They communicate via a Redis queue. The result of a time consuming task can be accessed through a special endpoint.
+
 ## How to run
 1. `cd` to project's directory
 2. Copy `.env.template` file and put it in the same directory. Rename the copy to `.env`.
