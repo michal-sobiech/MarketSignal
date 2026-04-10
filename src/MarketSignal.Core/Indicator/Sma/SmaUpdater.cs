@@ -39,7 +39,7 @@ public class SmaUpdater(
             rawDataFrom,
             missingSmaTo);
 
-        IEnumerable<Instant> times = rawData.Select(row => row.Time);
+        IEnumerable<Instant> times = rawData.Select(row => row.Time).Skip(smaSpec.Period - 1);
 
         List<decimal> rawDataFieldValues = rawData
             .Select(row => row.GetValue(smaSpec.Field))
@@ -49,12 +49,13 @@ public class SmaUpdater(
             rawDataFieldValues,
             smaSpec.Period);
 
-        IEnumerable<IndicatorRow> smaRows = times.Zip(
+        IEnumerable<IndicatorRow> newSmaRows = times.Zip(
             smaValues,
-            (time, smaValue) => new IndicatorRow(time, smaValue));
+            (time, smaValue) => new IndicatorRow(time, smaValue))
+            .Where(row => row.Time > missingSmaFrom);
 
         InstrumentIndicatorSpec instrumentIndicatorSpec = new(instrumentSpec, smaSpec);
-        await _indicatorService.SaveMany(instrumentIndicatorSpec, smaRows);
+        await _indicatorService.SaveMany(instrumentIndicatorSpec, newSmaRows);
     }
 
     private async Task<(Instant from, Instant to)?> GetMissingIndicatorTimeRange(

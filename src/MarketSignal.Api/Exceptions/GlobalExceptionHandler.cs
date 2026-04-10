@@ -1,5 +1,5 @@
+using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Core.Instrument.Spec;
-using MarketSignal.Core.KeyValuePairsStringParser;
 
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler(
             KeyNotFoundException e => (StatusCodes.Status404NotFound, ""),
             UnsupportedInstrumentSpecException e => (StatusCodes.Status400BadRequest, e.Message),
             InvalidRequestException e => (StatusCodes.Status400BadRequest, e.Message),
-            KeyValuePairsStringParserException e => (StatusCodes.Status400BadRequest, e.Message),
+            InvalidIndicatorArgsException e => (StatusCodes.Status400BadRequest, e.Message),
             _ => (StatusCodes.Status500InternalServerError, "Internal server error")
         };
 
