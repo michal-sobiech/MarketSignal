@@ -20,8 +20,11 @@ public class InstrumentRawDataController(
     private readonly IJobQueueProducer _jobQueueProducer = jobQueueProducer;
     private readonly IJobStore _jobStore = jobStore;
 
-    [HttpPost("pull")]
+    [HttpPost("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<JobIdResponse> UpdateInstrumentRawDataAsync(
         [FromQuery] string symbol,
         [FromQuery] string mic,
