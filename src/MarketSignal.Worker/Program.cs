@@ -38,12 +38,11 @@ builder.Services.AddDbContext<MarketDbContext>((serviceProvider, options) => {
     string connectionString = $"Server={marketDbOptions.Host};Port={marketDbOptions.Port};Database={marketDbOptions.DbName};Uid={marketDbOptions.UserName};Pwd={marketDbOptions.Password};AllowPublicKeyRetrieval=True";
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
-builder.Services.AddScoped<IInstrumentRawDataRepository, EfcoreInstr>();
-builder.Services.AddScoped<IInstrumentSpecRepository, EfcoreInstrumentSpecRepository>();
+builder.Services.AddScoped<IInstrumentRawDataRepository, EfcoreInstrumentRawDataRepository>();
+builder.Services.AddScoped<IIndicatorRepository, EfcoreIndicatorRepository>();
 
 builder.Services.AddScoped<IInstrumentSpecRepository, EfcoreInstrumentSpecRepository>();
 builder.Services.AddScoped<IIndicatorSpecRepository, EfcoreIndicatorSpecRepository>();
-builder.Services.AddScoped<IIndicatorRepository, EfcoreIndicatorRepository>();
 
 // ==========
 // Redis

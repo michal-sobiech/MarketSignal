@@ -20,8 +20,11 @@ public class EfcoreIndicatorRepository(
     private readonly IIndicatorSpecRepository _indicatorSpecRepository = indicatorSpecRepository;
 
     public async Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
-        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
-        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
+        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec)
+            ?? throw new InvalidOperationException("Instrument spec not found");
+
+        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec)
+            ?? throw new InvalidOperationException("Indicator spec not found");
 
         return await _dbContext.IndicatorRows
             .Where(x => x.InstrumentSpecId == instrumentSpecId && x.IndicatorSpecId == indicatorSpecId)
@@ -30,8 +33,11 @@ public class EfcoreIndicatorRepository(
     }
 
     public async Task SaveMany(InstrumentIndicatorSpec instrumentIndicatorSpec, IEnumerable<IndicatorRow> rows) {
-        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
-        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
+        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec)
+            ?? throw new InvalidOperationException("Instrument spec not found");
+
+        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec)
+            ?? throw new InvalidOperationException("Indicator spec not found");
 
         List<IndicatorRowEntity> entities = rows
             .Select(row => new IndicatorRowEntity {
@@ -52,8 +58,11 @@ public class EfcoreIndicatorRepository(
         Instant fromInclusive,
         Instant toInclusive
     ) {
-        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec);
-        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec);
+        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec)
+            ?? throw new InvalidOperationException("Instrument spec not found");
+
+        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec)
+            ?? throw new InvalidOperationException("Indicator spec not found");
 
         return await _dbContext.IndicatorRows
             .Where(x =>

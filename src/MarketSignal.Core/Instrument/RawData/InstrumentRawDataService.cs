@@ -5,26 +5,39 @@ using NodaTime;
 
 namespace MarketSignal.Core.Instrument.RawData;
 
-public class InstrumentRawDataService(IInstrumentRawDataRepository instrumentRawDataRepository) {
+public class InstrumentRawDataService(
+    IInstrumentSpecRepository instrumentSpecRepository,
+    IInstrumentRawDataRepository instrumentRawDataRepository
+) {
 
-    private readonly IInstrumentRawDataRepository _repository = instrumentRawDataRepository;
+    private readonly IInstrumentSpecRepository _instrumentSpecRepo = instrumentSpecRepository;
+    private readonly IInstrumentRawDataRepository _instrumentRawDataRepo = instrumentRawDataRepository;
 
-    public Task<Instant?> FetchNewestRowTime(InstrumentSpec instrumentSpec) {
-        return _repository.FetchNewestRowTime(instrumentSpec);
+    public async Task<Instant?> FetchNewestRowTime(InstrumentSpec instrumentSpec) {
+        long instrumentSpecId = await _instrumentSpecRepo.GetId(instrumentSpec)
+            ?? throw new InvalidOperationException("Instrument spec not found");
+
+        return await _instrumentRawDataRepo.FetchNewestRowTime(instrumentSpecId);
     }
 
-    public Task SaveMany(
+    public async Task SaveMany(
         InstrumentSpec instrumentSpec,
         IEnumerable<InstrumentRawDataRow> rows
     ) {
-        return _repository.SaveMany(instrumentSpec, rows);
+        long instrumentSpecId = await _instrumentSpecRepo.GetId(instrumentSpec)
+            ?? throw new InvalidOperationException("Instrument spec not found");
+
+        await _instrumentRawDataRepo.SaveMany(instrumentSpecId, rows);
     }
 
-    public Task<IEnumerable<InstrumentRawDataRow>> FetchByTimeRange(
+    public async Task<IEnumerable<InstrumentRawDataRow>> FetchByTimeRange(
         InstrumentSpec instrumentSpec,
         Instant fromInclusive,
         Instant toInclusive
     ) {
-        return _repository.FetchByTimeRange(instrumentSpec, fromInclusive, toInclusive);
+        long instrumentSpecId = await _instrumentSpecRepo.GetId(instrumentSpec)
+            ?? throw new InvalidOperationException("Instrument spec not found");
+
+        return await _instrumentRawDataRepo.FetchByTimeRange(instrumentSpecId, fromInclusive, toInclusive);
     }
 }

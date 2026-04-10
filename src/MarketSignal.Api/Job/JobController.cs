@@ -25,7 +25,9 @@ public class InstrumentIndicatorController(
         var jobStatus = jobEntity.JobStatus;
         GetJobStatusResponse response = new(jobStatus);
 
-        await _jobStore.Delete(jobId);
+        if (jobStatus.IsFinal()) {
+            await _jobStore.Delete(jobId);
+        }
 
         return Ok(response);
     }
