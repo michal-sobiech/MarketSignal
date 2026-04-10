@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 
+using MarketSignal.Api.Exceptions;
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Contracts.Instrument;
@@ -9,7 +10,6 @@ using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Core;
 using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
-using MarketSignal.Core.Instrument;
 using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Instrument.RawData;
 using MarketSignal.Infrastructure.Instrument.Spec;
@@ -76,7 +76,11 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 var app = builder.Build();
+
+app.UseExceptionHandler(_ => { });
 
 using (var scope = app.Services.CreateScope()) {
     var db = scope.ServiceProvider.GetRequiredService<MarketDbContext>();

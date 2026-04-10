@@ -15,7 +15,7 @@ public static class SupportedInstrumentSpecRegistry {
 
     public static void AssertHasInstrumentSpec(InstrumentSpec spec) {
         if (!InstrumentSpecs.Contains(spec)) {
-            throw new InvalidOperationException($"Instrument spec \"{spec}\" is not registered.");
+            throw new UnsupportedInstrumentSpecException(spec);
         }
     }
 
