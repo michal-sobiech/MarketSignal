@@ -23,9 +23,9 @@ public class Worker(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
         while (!stoppingToken.IsCancellationRequested) {
-            if (_logger.IsEnabled(LogLevel.Information)) {
-                _logger.LogInformation("Try to execute a job");
-            }
+            // if (_logger.IsEnabled(LogLevel.Information)) {
+            //     _logger.LogInformation("Try to execute a job");
+            // }
             await TryToDequeueAndExecuteJob();
             await Task.Delay(100, stoppingToken);
         }

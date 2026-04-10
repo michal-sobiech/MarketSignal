@@ -13,4 +13,22 @@ public class MarketDbContext : DbContext {
     public DbSet<IndicatorRowEntity> IndicatorRows => Set<IndicatorRowEntity>();
     public DbSet<InstrumentSpecEntity> InstrumentSpecs => Set<InstrumentSpecEntity>();
     public DbSet<IndicatorSpecEntity> IndicatorSpecs => Set<IndicatorSpecEntity>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<InstrumentRawDataRowEntity>()
+            .HasOne<InstrumentSpecEntity>()
+            .WithMany()
+            .HasForeignKey(x => x.InstrumentSpecId);
+
+        modelBuilder.Entity<IndicatorRowEntity>()
+            .HasOne<InstrumentSpecEntity>()
+            .WithMany()
+            .HasForeignKey(x => x.InstrumentSpecId);
+        modelBuilder.Entity<IndicatorRowEntity>()
+            .HasOne<IndicatorSpecEntity>()
+            .WithMany()
+            .HasForeignKey(x => x.IndicatorSpecId);
+    }
 }

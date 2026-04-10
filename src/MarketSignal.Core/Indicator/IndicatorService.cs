@@ -17,7 +17,7 @@ public class IndicatorService(
     private readonly IIndicatorRepository _repository = indicatorRepository;
 
     public async Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
-        var (instrumentSpecId, indicatorSpecId) = await FetchInstrumentIndicatorSpecIds(instrumentIndicatorSpec);
+        var (instrumentSpecId, indicatorSpecId) = await FetchSpecsOrThrow(instrumentIndicatorSpec);
         return await _repository.FetchNewestRowTime(instrumentSpecId, indicatorSpecId);
     }
 
@@ -25,7 +25,8 @@ public class IndicatorService(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         IEnumerable<IndicatorRow> rows
     ) {
-        var (instrumentSpecId, indicatorSpecId) = await FetchInstrumentIndicatorSpecIds(instrumentIndicatorSpec);
+        long instrumentSpecId = await _instrumentSpecRepository.GetOrCreateId(instrumentIndicatorSpec.InstrumentSpec);
+        long indicatorSpecId = await _indicatorSpecRepository.GetOrCreateId(instrumentIndicatorSpec.IndicatorSpec);
         await _repository.SaveMany(instrumentSpecId, indicatorSpecId, rows);
     }
 
@@ -34,11 +35,11 @@ public class IndicatorService(
         Instant from,
         Instant to
     ) {
-        var (instrumentSpecId, indicatorSpecId) = await FetchInstrumentIndicatorSpecIds(instrumentIndicatorSpec);
+        var (instrumentSpecId, indicatorSpecId) = await FetchSpecsOrThrow(instrumentIndicatorSpec);
         return await _repository.FetchByTimeRange(instrumentSpecId, indicatorSpecId, from, to);
     }
 
-    private async Task<(long instrumentSpecId, long indicatorSpecId)> FetchInstrumentIndicatorSpecIds(InstrumentIndicatorSpec spec) {
+    private async Task<(long instrumentSpecId, long indicatorSpecId)> FetchSpecsOrThrow(InstrumentIndicatorSpec spec) {
         long instrumentSpecId = await _instrumentSpecRepository.GetId(spec.InstrumentSpec)
             ?? throw new InvalidOperationException("Instrument spec not found");
 

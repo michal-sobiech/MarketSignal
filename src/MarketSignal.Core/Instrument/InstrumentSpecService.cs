@@ -8,6 +8,10 @@ public class InstrumentSpecService(
 
     private readonly IInstrumentSpecRepository _instrumentSpecRepository = instrumentSpecRepository;
 
+    public async Task<bool> Exists(InstrumentSpec spec) {
+        return await _instrumentSpecRepository.GetId(spec) is { };
+    }
+
     public Task Save(InstrumentSpec spec) {
         return _instrumentSpecRepository.Save(spec);
     }

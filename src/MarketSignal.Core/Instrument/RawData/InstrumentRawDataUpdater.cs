@@ -7,11 +7,13 @@ namespace MarketSignal.Core.Instrument.RawData;
 
 public class InstrumentRawDataUpdater(
     IInstrumentRawDataProvider instrumentRawDataProvider,
-    InstrumentRawDataService instrumentRawDataService
+    InstrumentRawDataService instrumentRawDataService,
+    InstrumentSpecService instrumentSpecService
 ) {
 
     private readonly IInstrumentRawDataProvider _rawDataProvider = instrumentRawDataProvider;
     private readonly InstrumentRawDataService _rawDataService = instrumentRawDataService;
+    private readonly InstrumentSpecService _specService = instrumentSpecService;
 
     public async Task UpdateInstrumentDailyRawData(InstrumentSpec instrumentSpec) {
         IEnumerable<InstrumentRawDataRow> newRows = await FetchNewDailyRows(instrumentSpec);
@@ -19,10 +21,12 @@ public class InstrumentRawDataUpdater(
     }
 
     private async Task<IEnumerable<InstrumentRawDataRow>> FetchNewDailyRows(InstrumentSpec instrumentSpec) {
-        Instant? newestSavedRowTime = await _rawDataService.FetchNewestRowTime(instrumentSpec);
-        Instant now = SystemClock.Instance.GetCurrentInstant();
+        Instant from = Instant.MinValue;
+        if (await _specService.Exists(instrumentSpec)) {
+            from = await _rawDataService.FetchNewestRowTime(instrumentSpec) ?? Instant.MinValue;
+        }
 
-        Instant from = newestSavedRowTime ?? Instant.MaxValue;
+        Instant now = SystemClock.Instance.GetCurrentInstant();
 
         return await _rawDataProvider.FetchDailyRawData(instrumentSpec, from, now);
     }

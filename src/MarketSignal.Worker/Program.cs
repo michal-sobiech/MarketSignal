@@ -6,6 +6,7 @@ using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
+using MarketSignal.Core.Instrument;
 using MarketSignal.Core.Instrument.RawData;
 using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Instrument.RawData;
@@ -86,6 +87,9 @@ builder.Services.AddSingleton<IInstrumentRawDataProvider, AVInstrumentRawDataPro
 
 // Instrument raw data service
 builder.Services.AddSingleton<InstrumentRawDataService>();
+
+builder.Services.AddSingleton<InstrumentSpecService>();
+builder.Services.AddSingleton<IndicatorSpecService>();
 
 builder.Services.AddSingleton<InstrumentRawDataUpdater>();
 builder.Services.AddSingleton<UpdateInstrumentRawDataJobHandler>();
