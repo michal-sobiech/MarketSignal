@@ -20,7 +20,7 @@ public class EfcoreIndicatorSpecRepository(
     }
 
     private async Task<long> GetSmaSpecId(int period) {
-        string indicatorKindStr = EfcoreIndicatorKindMapper.ToString(IndicatorKind.SMA);
+        string indicatorKindStr = IndicatorKind.SMA.ToString();
 
         JsonNode expectedIndicatorArgs = new JsonObject { ["period"] = period };
 

@@ -1,4 +1,3 @@
-using MarketSignal.Api.Mappers;
 using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Instrument.RawData;
 using MarketSignal.Contracts.Job;
@@ -27,7 +26,7 @@ public class InstrumentRawDataController(
         [FromQuery] string mic,
         [FromQuery] string dataProvider
     ) {
-        InstrumentRawDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
+        var dataProviderKind = Enum.Parse<InstrumentRawDataProviderKind>(dataProvider);
 
         InstrumentSpec instrumentSpec = new(symbol, mic, dataProviderKind);
 

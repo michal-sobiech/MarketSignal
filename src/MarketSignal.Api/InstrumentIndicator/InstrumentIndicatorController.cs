@@ -1,4 +1,3 @@
-using MarketSignal.Api.Mappers;
 using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
@@ -39,8 +38,8 @@ public class InstrumentIndicatorController(
         [FromQuery] DateTimeOffset from,
         [FromQuery] DateTimeOffset to
     ) {
-        InstrumentRawDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
-        IndicatorKind indicatorKind = IndicatorKindMapper.FromString(indicatorName);
+        InstrumentRawDataProviderKind dataProviderKind = Enum.Parse<InstrumentRawDataProviderKind>(dataProvider);
+        IndicatorKind indicatorKind = Enum.Parse<IndicatorKind>(indicatorName);
         Instant fromInstant = Instant.FromDateTimeOffset(from);
         Instant toInstant = Instant.FromDateTimeOffset(to);
 
@@ -65,8 +64,8 @@ public class InstrumentIndicatorController(
         [FromQuery] string indicatorName,
         [FromQuery] string indicatorArgs
     ) {
-        InstrumentRawDataProviderKind dataProviderKind = MarketDataProviderKindMapper.FromString(dataProvider);
-        IndicatorKind indicatorKind = IndicatorKindMapper.FromString(indicatorName);
+        InstrumentRawDataProviderKind dataProviderKind = Enum.Parse<InstrumentRawDataProviderKind>(dataProvider);
+        IndicatorKind indicatorKind = Enum.Parse<IndicatorKind>(indicatorName);
 
         var indicatorArgsDict = _keyValuePairsStringParser.Parse(indicatorArgs);
         IndicatorSpec indicatorSpec = IndicatorSpecFactory.Of(indicatorKind, indicatorArgsDict);

@@ -13,7 +13,7 @@ public class EfcoreInstrumentSpecRepository(
         return _dbContext.InstrumentSpecs
             .Where(x => x.Symbol == instrumentSpec.Symbol &&
                         x.Mic == instrumentSpec.Mic &&
-                        x.DataProvider == EfcoreInstrumentRawDataProviderKindMapper.ToString(instrumentSpec.DataProviderKind))
+                        x.DataProvider == instrumentSpec.DataProviderKind.ToString())
             .First()
             .Id;
     }
