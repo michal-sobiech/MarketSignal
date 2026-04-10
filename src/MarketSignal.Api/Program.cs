@@ -6,6 +6,7 @@ using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Core;
+using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
 using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Instrument.Spec;
@@ -20,13 +21,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Market database
 builder.Services.AddSingleton<MarketDbOptions>(_ => new MarketDbOptions {
-    Host = Environment.GetEnvironmentVariable("MARKET_DB_HOST") ?? throw new ArgumentException("MARKET_DB_HOST is not set"),
-    Port = int.Parse(Environment.GetEnvironmentVariable("MARKET_DB_PORT") ?? throw new ArgumentException("MARKET_DB_PORT is not set")),
-    DbName = Environment.GetEnvironmentVariable("MARKET_DB_NAME") ?? throw new ArgumentException("MARKET_DB_NAME is not set"),
-    UserName = Environment.GetEnvironmentVariable("MARKET_DB_USER_NAME") ?? throw new ArgumentException("MARKET_DB_USER_NAME is not set"),
-    Password = Environment.GetEnvironmentVariable("MARKET_DB_PASSWORD") ?? throw new ArgumentException("MARKET_DB_PASSWORD is not set"),
+    Host = EnvVarUtils.RequireEnvVar("MARKET_DB_HOST"),
+    Port = int.Parse(EnvVarUtils.RequireEnvVar("MARKET_DB_PORT")),
+    DbName = EnvVarUtils.RequireEnvVar("MARKET_DB_NAME"),
+    UserName = EnvVarUtils.RequireEnvVar("MARKET_DB_USER_NAME"),
+    Password = EnvVarUtils.RequireEnvVar("MARKET_DB_PASSWORD")
 });
-
 builder.Services.AddDbContext<MarketDbContext>((serviceProvider, options) => {
     var marketDbOptions = serviceProvider.GetRequiredService<MarketDbOptions>();
     string connectionString = $"Server={marketDbOptions.Host};Port={marketDbOptions.Port};Database={marketDbOptions.DbName};Uid={marketDbOptions.UserName};Pwd={marketDbOptions.Password};AllowPublicKeyRetrieval=True;";
@@ -38,8 +38,8 @@ builder.Services.AddScoped<IIndicatorRepository, EfcoreIndicatorRepository>();
 
 // Redis
 builder.Services.AddSingleton<RedisOptions>(_ => new RedisOptions {
-    Host = Environment.GetEnvironmentVariable("REDIS_HOST") ?? throw new ArgumentException("REDIS_HOST is not set"),
-    Port = int.Parse(Environment.GetEnvironmentVariable("REDIS_PORT") ?? throw new ArgumentException("REDIS_PORT is not set"))
+    Host = EnvVarUtils.RequireEnvVar("REDIS_HOST"),
+    Port = int.Parse(EnvVarUtils.RequireEnvVar("REDIS_PORT"))
 });
 builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider => {
     var redisOptions = serviceProvider.GetRequiredService<RedisOptions>();

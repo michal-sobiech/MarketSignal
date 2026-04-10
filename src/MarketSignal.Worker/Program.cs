@@ -1,7 +1,10 @@
+using MarketSignal.Contracts.Instrument.RawData;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
+using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
 using MarketSignal.Core.Instrument.RawData;
+using MarketSignal.Infrastructure.Instrument.RawData;
 using MarketSignal.Infrastructure.Job;
 using MarketSignal.Infrastructure.MarketDb;
 using MarketSignal.Worker;
@@ -14,13 +17,17 @@ using StackExchange.Redis;
 
 var builder = Host.CreateApplicationBuilder(args);
 
+// TODO add env vars util for checking if a value is set
+// ==========
 // Market database
+// ==========
+
 builder.Services.AddSingleton<MarketDbOptions>(_ => new MarketDbOptions {
-    Host = Environment.GetEnvironmentVariable("MARKET_DB_HOST") ?? throw new ArgumentException("MARKET_DB_HOST is not set"),
-    Port = int.Parse(Environment.GetEnvironmentVariable("MARKET_DB_PORT") ?? throw new ArgumentException("MARKET_DB_PORT is not set")),
-    DbName = Environment.GetEnvironmentVariable("MARKET_DB_NAME") ?? throw new ArgumentException("MARKET_DB_NAME is not set"),
-    UserName = Environment.GetEnvironmentVariable("MARKET_DB_USER_NAME") ?? throw new ArgumentException("MARKET_DB_USER_NAME is not set"),
-    Password = Environment.GetEnvironmentVariable("MARKET_DB_PASSWORD") ?? throw new ArgumentException("MARKET_DB_PASSWORD is not set"),
+    Host = EnvVarUtils.RequireEnvVar("MARKET_DB_HOST"),
+    Port = int.Parse(EnvVarUtils.RequireEnvVar("MARKET_DB_PORT")),
+    DbName = EnvVarUtils.RequireEnvVar("MARKET_DB_NAME"),
+    UserName = EnvVarUtils.RequireEnvVar("MARKET_DB_USER_NAME"),
+    Password = EnvVarUtils.RequireEnvVar("MARKET_DB_PASSWORD")
 });
 builder.Services.AddDbContext<MarketDbContext>((serviceProvider, options) => {
     var marketDbOptions = serviceProvider.GetRequiredService<MarketDbOptions>();
@@ -28,10 +35,13 @@ builder.Services.AddDbContext<MarketDbContext>((serviceProvider, options) => {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+// ==========
 // Redis
+// ==========
+
 builder.Services.AddSingleton<RedisOptions>(_ => new RedisOptions {
-    Host = Environment.GetEnvironmentVariable("REDIS_HOST") ?? throw new ArgumentException("REDIS_HOST is not set"),
-    Port = int.Parse(Environment.GetEnvironmentVariable("REDIS_PORT") ?? throw new ArgumentException("REDIS_PORT is not set"))
+    Host = EnvVarUtils.RequireEnvVar("REDIS_HOST"),
+    Port = int.Parse(EnvVarUtils.RequireEnvVar("REDIS_PORT"))
 });
 builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider => {
     var redisOptions = serviceProvider.GetRequiredService<RedisOptions>();
@@ -51,7 +61,19 @@ builder.Services.AddSingleton<IJobStore>(serviceProvider =>
     )
 );
 
+// ==========
 // App
+// ==========
+
+// Alpha Vantage
+builder.Services.AddSingleton<AVInstrumentIdMapper>();
+builder.Services.AddSingleton<AVInstrumentRawDataProviderOptions>(_ => new AVInstrumentRawDataProviderOptions {
+    BaseUrl = EnvVarUtils.RequireEnvVar("ALPHA_VANTAGE_BASE_URL"),
+    ApiKey = EnvVarUtils.RequireEnvVar("ALPHA_VANTAGE_API_KEY")
+});
+
+
+builder.Services.AddSingleton<IInstrumentRawDataProvider, AVInstrumentRawDataProvider>();
 builder.Services.AddSingleton<InstrumentRawDataUpdater>();
 builder.Services.AddSingleton<UpdateInstrumentRawDataJobHandler>();
 builder.Services.AddSingleton<IndicatorValuesUpdater>();

@@ -19,13 +19,13 @@ public class Worker(
     private readonly IJobStore _jobStore = jobStore;
     private readonly UpdateInstrumentRawDataJobHandler _updateInstrumentRawDataJobHandler = updateInstrumentRawDataJobHandler;
     private readonly UpdateIndicatorValuesJobHandler _updateIndicatorValuesJobHandler = updateIndicatorValuesJobHandler;
-    // private readonly ILogger<Worker> _logger = logger;
+    private readonly ILogger<Worker> _logger = logger;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
         while (!stoppingToken.IsCancellationRequested) {
-            // if (_logger.IsEnabled(LogLevel.Information)) {
-            //     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            // }
+            if (_logger.IsEnabled(LogLevel.Information)) {
+                _logger.LogInformation("Try to execute a job");
+            }
             await TryToDequeueAndExecuteJob();
             await Task.Delay(100, stoppingToken);
         }

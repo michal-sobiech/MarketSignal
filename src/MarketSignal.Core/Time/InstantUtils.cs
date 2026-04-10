@@ -2,7 +2,7 @@ using NodaTime;
 
 namespace MarketSignal.Core.Time;
 
-public class InstantUtils {
+public static class InstantUtils {
 
     public static IEnumerable<Instant> DaysBetweenInstants(Instant fromInclusive, Instant toInclusive) {
         var days = new List<Instant>();
