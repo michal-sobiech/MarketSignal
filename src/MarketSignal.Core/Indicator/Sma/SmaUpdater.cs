@@ -1,11 +1,11 @@
-using MarketSignal.Application.Math;
-using MarketSignal.Application.RawData;
-using MarketSignal.Contracts.Indicator;
-using MarketSignal.Contracts.Instrument.RawData;
+using MarketSignal.Core.Math;
+using MarketSignal.Core.Instrument.RawData;
 
 using NodaTime;
+using MarketSignal.Contracts.Instrument.RawData;
+using MarketSignal.Contracts.Indicator;
 
-namespace MarketSignal.Application.Indicator.Sma;
+namespace MarketSignal.Core.Indicator.Sma;
 
 public class SmaUpdater(
     IndicatorService indicatorService,

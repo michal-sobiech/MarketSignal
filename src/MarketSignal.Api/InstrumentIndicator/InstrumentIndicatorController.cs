@@ -1,4 +1,3 @@
-using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Contracts.Instrument.RawData;
@@ -6,6 +5,8 @@ using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
+using MarketSignal.Core;
+using MarketSignal.Core.Indicator;
 
 using Microsoft.AspNetCore.Mvc;
 

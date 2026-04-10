@@ -21,4 +21,10 @@
     <ProjectReference Include="..\MarketSignal.Contracts\MarketSignal.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <CompilerVisibleProperty Include="RootNamespace" />
+    <CompilerVisibleProperty Include="ProjectDir" />
+  </ItemGroup>
+
+
 </Project>

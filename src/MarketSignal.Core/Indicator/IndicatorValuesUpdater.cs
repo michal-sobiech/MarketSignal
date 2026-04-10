@@ -1,6 +1,6 @@
 using MarketSignal.Contracts.Indicator;
 
-namespace MarketSignal.Worker.Indicator;
+namespace MarketSignal.Core.Indicator;
 
 public class IndicatorValuesUpdater {
 

@@ -1,4 +1,4 @@
-namespace MarketSignal.Application;
+namespace MarketSignal.Core;
 
 public class KeyValuePairsStringParser {
     public Dictionary<string, string> Parse(string value) {

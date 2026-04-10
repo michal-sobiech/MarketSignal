@@ -1,5 +1,7 @@
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
+using MarketSignal.Core.Indicator;
+using MarketSignal.Core.Instrument.RawData;
 using MarketSignal.Infrastructure.Job;
 using MarketSignal.Infrastructure.MarketDb;
 using MarketSignal.Worker;

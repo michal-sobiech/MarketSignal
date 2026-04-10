@@ -2,7 +2,7 @@ using MarketSignal.Contracts.Indicator;
 
 using NodaTime;
 
-namespace MarketSignal.Application;
+namespace MarketSignal.Core.Indicator;
 
 public class IndicatorService(IIndicatorRepository indicatorRepository) {
 

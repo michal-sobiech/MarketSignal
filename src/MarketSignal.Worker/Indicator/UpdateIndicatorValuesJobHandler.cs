@@ -1,6 +1,7 @@
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Store;
+using MarketSignal.Core.Indicator;
 
 namespace MarketSignal.Worker.Indicator;
 

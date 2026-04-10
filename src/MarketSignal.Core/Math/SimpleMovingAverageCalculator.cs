@@ -1,4 +1,4 @@
-namespace MarketSignal.Application.Math;
+namespace MarketSignal.Core.Math;
 
 public class SimpleMovingAverageCalculator {
     public IEnumerable<decimal> CalculateSimpleMovingAverage(List<decimal> values, int period) {

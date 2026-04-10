@@ -16,6 +16,12 @@
   <ItemGroup>
     <ProjectReference Include="..\MarketSignal.Contracts\MarketSignal.Contracts.csproj" />
     <ProjectReference Include="..\MarketSignal.Infrastructure\MarketSignal.Infrastructure.csproj" />
+    <ProjectReference Include="..\MarketSignal.Core\MarketSignal.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <CompilerVisibleProperty Include="RootNamespace" />
+    <CompilerVisibleProperty Include="ProjectDir" />
   </ItemGroup>
 
 </Project>

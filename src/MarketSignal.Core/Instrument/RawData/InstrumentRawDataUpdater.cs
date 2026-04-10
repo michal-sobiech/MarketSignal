@@ -3,7 +3,7 @@ using MarketSignal.Contracts.Instrument.RawData;
 
 using NodaTime;
 
-namespace MarketSignal.Application.RawData;
+namespace MarketSignal.Core.Instrument.RawData;
 
 public class InstrumentRawDataUpdater(
     IInstrumentRawDataProvider instrumentRawDataProvider,

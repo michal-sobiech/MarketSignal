@@ -1,6 +1,6 @@
 using NodaTime;
 
-namespace MarketSignal.Application.Time;
+namespace MarketSignal.Core.Time;
 
 public class InstantUtils {
 
