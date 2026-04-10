@@ -8,7 +8,7 @@ public class IndicatorSpecFactory {
         Dictionary<string, string> indicatorArgs
     ) => indicatorKind switch {
         IndicatorKind.SMA => SmaSpecFactory.Of(indicatorArgs),
-        _ => throw new ArgumentException("Invalid indicator kind")
+        _ => throw new ArgumentOutOfRangeException(nameof(indicatorKind), indicatorKind, $"Invalid indicator kind: {indicatorKind}")
     };
 
 }

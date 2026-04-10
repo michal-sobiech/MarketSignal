@@ -17,6 +17,6 @@ public record InstrumentRawDataRow(
             InstrumentRawDataField.LOW => Low,
             InstrumentRawDataField.CLOSE => Close,
             InstrumentRawDataField.VOLUME => Volume,
-            _ => throw new ArgumentOutOfRangeException(nameof(field), field, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(field), field, "Unsupported field")
         };
 }

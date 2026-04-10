@@ -47,7 +47,7 @@ public class Worker(
         await (jobEntity.JobPayload switch {
             UpdateInstrumentRawDataJobPayload payload => _updateInstrumentRawDataJobHandler.HandleJob(jobId, payload),
             CalcIndicatorJobPayload payload => _updateIndicatorValuesJobHandler.HandleJob(jobId, payload),
-            _ => throw new ArgumentException("Invalid payload")
+            _ => throw new ArgumentOutOfRangeException(nameof(jobEntity.JobPayload), jobEntity.JobPayload, "Invalid payload")
         });
     }
 }
