@@ -14,7 +14,7 @@ public class UpdateIndicatorValuesJobHandler(
     private readonly IJobStore _jobStore = jobStore;
 
     public async Task HandleJob(Guid jobId, CalcIndicatorJobPayload jobPayload) {
-        // TODO call indicatorValuesUpdater
+        await _indicatorValuesUpdater.CalcAndUpdateIndicatorValues(jobPayload.InstrumentIndicatorSpec);
 
         JobEntity entity = (await _jobStore.Fetch(jobId))!;
         JobEntity updatedEntity = entity with { JobStatus = JobStatus.SUCCESS };

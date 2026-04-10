@@ -47,7 +47,7 @@ public class EfcoreIndicatorSpecRepository(
     }
 
     private async Task<long> SaveSmaSpec(SmaSpec spec) {
-        JsonNode indicatorArgs = new JsonObject { ["period"] = spec.Period };
+        JsonNode indicatorArgs = new JsonObject { ["period"] = spec.Period, ["field"] = spec.Field.ToString() };
 
         var entity = new IndicatorSpecEntity {
             IndictorName = spec.Kind.ToString(),

@@ -14,10 +14,13 @@ public class EfcoreIndicatorRepository(
     private readonly MarketDbContext _dbContext = dbContext;
 
     public async Task<Instant?> FetchNewestRowTime(long instrumentSpecId, long indicatorSpecId) {
-        return await _dbContext.IndicatorRows
+        DateTimeOffset? max = await _dbContext.IndicatorRows
             .Where(x => x.InstrumentSpecId == instrumentSpecId && x.IndicatorSpecId == indicatorSpecId)
-            .Select(x => Instant.FromDateTimeOffset(x.Time))
-            .MaxAsync();
+            .MaxAsync(x => (DateTimeOffset?)x.Time);
+
+        return max is null
+            ? null
+            : Instant.FromDateTimeOffset(max.Value);
     }
 
     public async Task SaveMany(

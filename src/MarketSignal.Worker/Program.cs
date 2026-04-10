@@ -6,8 +6,10 @@ using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
+using MarketSignal.Core.Indicator.Sma;
 using MarketSignal.Core.Instrument.RawData;
 using MarketSignal.Core.Instrument.Spec;
+using MarketSignal.Core.Math;
 using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Instrument.RawData;
 using MarketSignal.Infrastructure.Instrument.Spec;
@@ -90,6 +92,9 @@ builder.Services.AddSingleton<InstrumentRawDataService>();
 builder.Services.AddSingleton<InstrumentSpecService>();
 builder.Services.AddSingleton<IndicatorSpecService>();
 
+builder.Services.AddSingleton<IndicatorService>();
+builder.Services.AddSingleton<SimpleMovingAverageCalculator>();
+builder.Services.AddSingleton<SmaUpdater>();
 builder.Services.AddSingleton<InstrumentRawDataUpdater>();
 builder.Services.AddSingleton<UpdateInstrumentRawDataJobHandler>();
 

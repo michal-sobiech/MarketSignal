@@ -49,10 +49,18 @@ public class EfcoreInstrumentRawDataRepository(
         Instant fromInclusive,
         Instant toInclusive
     ) {
+        DateTimeOffset? from = fromInclusive == Instant.MinValue
+            ? null
+            : fromInclusive.ToDateTimeOffset();
+
+        DateTimeOffset? to = toInclusive == Instant.MinValue
+            ? null
+            : toInclusive.ToDateTimeOffset();
+
         return _dbContext.InstrumentRawDataRows
             .Where(x => x.InstrumentSpecId == instrumentSpecId &&
-                        x.Time >= fromInclusive.ToDateTimeOffset() &&
-                        x.Time <= toInclusive.ToDateTimeOffset())
+                (from == null || x.Time >= from) &&
+                (to == null || x.Time <= to))
             .Select(row => row.ToDomain())
             .ToList();
     }

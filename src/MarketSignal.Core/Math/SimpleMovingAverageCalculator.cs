@@ -8,7 +8,7 @@ public class SimpleMovingAverageCalculator {
 
         for (int windowLastIndex = period - 1; windowLastIndex < values.Count; windowLastIndex++) {
             int windowFirstIndex = windowLastIndex - period + 1;
-            decimal windowAvg = values.Slice(windowFirstIndex, windowLastIndex + 1).Average();
+            decimal windowAvg = values.Slice(windowFirstIndex, period).Average();
             output.Add(windowAvg);
         }
 
