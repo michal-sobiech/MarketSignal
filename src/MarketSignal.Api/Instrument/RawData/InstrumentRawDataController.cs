@@ -4,6 +4,7 @@ using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
+using MarketSignal.Core.Instrument.Spec;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,7 @@ public class InstrumentRawDataController(
         var dataProviderKind = Enum.Parse<InstrumentRawDataProviderKind>(dataProvider);
 
         InstrumentSpec instrumentSpec = new(symbol, mic, dataProviderKind);
+        SupportedInstrumentSpecRegistry.AssertHasInstrumentSpec(instrumentSpec);
 
         Guid jobId = Guid.NewGuid();
         var payload = new UpdateInstrumentRawDataJobPayload(instrumentSpec);

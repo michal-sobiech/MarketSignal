@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MarketSignal.Contracts\MarketSignal.Contracts.csproj" />
+    <ProjectReference Include="..\MarketSignal.Core\MarketSignal.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

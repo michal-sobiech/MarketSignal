@@ -6,8 +6,8 @@ using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
-using MarketSignal.Core.Instrument;
 using MarketSignal.Core.Instrument.RawData;
+using MarketSignal.Core.Instrument.Spec;
 using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Instrument.RawData;
 using MarketSignal.Infrastructure.Instrument.Spec;
@@ -78,7 +78,6 @@ builder.Services.AddSingleton<IJobStore>(serviceProvider =>
 builder.Services.AddHttpClient();
 
 // Instrument raw data provider
-builder.Services.AddSingleton<AVInstrumentIdMapper>();
 builder.Services.AddSingleton<AVInstrumentRawDataProviderOptions>(_ => new AVInstrumentRawDataProviderOptions {
     BaseUrl = EnvVarUtils.RequireEnvVar("ALPHA_VANTAGE_BASE_URL"),
     ApiKey = EnvVarUtils.RequireEnvVar("ALPHA_VANTAGE_API_KEY")

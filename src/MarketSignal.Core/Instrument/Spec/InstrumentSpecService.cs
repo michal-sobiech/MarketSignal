@@ -1,6 +1,6 @@
 using MarketSignal.Contracts.Instrument;
 
-namespace MarketSignal.Core.Instrument;
+namespace MarketSignal.Core.Instrument.Spec;
 
 public class InstrumentSpecService(
     IInstrumentSpecRepository instrumentSpecRepository

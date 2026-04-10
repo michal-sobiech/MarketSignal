@@ -1,5 +1,6 @@
 using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Instrument.RawData;
+using MarketSignal.Core.Instrument.Spec;
 
 using NodaTime;
 
@@ -22,8 +23,6 @@ public class InstrumentRawDataUpdater(
 
     private async Task<IEnumerable<InstrumentRawDataRow>> FetchNewDailyRows(InstrumentSpec instrumentSpec) {
         Instant from = await ChooseFromTime(instrumentSpec);
-        Console.WriteLine("RRRRRR");
-        Console.WriteLine(from.ToDateTimeOffset().ToString());
         Instant now = SystemClock.Instance.GetCurrentInstant();
 
         return await _rawDataProvider.FetchDailyRawData(instrumentSpec, from, now);

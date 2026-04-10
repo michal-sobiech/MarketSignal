@@ -8,12 +8,10 @@ using NodaTime;
 namespace MarketSignal.Infrastructure.Instrument.RawData;
 
 public class AVInstrumentRawDataProvider(
-    AVInstrumentIdMapper instrumentIdMapper,
     AVInstrumentRawDataProviderOptions options,
     HttpClient httpClient
 ) : IInstrumentRawDataProvider {
 
-    private readonly AVInstrumentIdMapper _instrumentIdMapper = instrumentIdMapper;
     private readonly AVInstrumentRawDataProviderOptions _options = options;
     private readonly HttpClient _httpClient = httpClient;
 
@@ -22,7 +20,7 @@ public class AVInstrumentRawDataProvider(
         Instant fromInclusive,
         Instant toInclusive
     ) {
-        string alphaVantageInstrumentId = _instrumentIdMapper.FromSymbolAndMic(
+        string alphaVantageInstrumentId = AVInstrumentIdMapper.FromSymbolAndMic(
             instrumentSpec.Symbol,
             instrumentSpec.Mic);
 
