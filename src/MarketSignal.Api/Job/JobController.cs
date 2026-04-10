@@ -15,6 +15,9 @@ public class InstrumentIndicatorController(
 
     [HttpGet("{jobId}/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<GetJobStatusResponse>> GetJobStatus(Guid jobId) {
         JobEntity? jobEntity = await _jobStore.Fetch(jobId);
 
