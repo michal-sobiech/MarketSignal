@@ -1,5 +1,6 @@
 using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Instrument.RawData;
+using MarketSignal.Core.Indicator;
 
 using NodaTime;
 
@@ -15,7 +16,7 @@ public class InstrumentRawDataService(
 
     public async Task<Instant?> FetchNewestRowTime(InstrumentSpec instrumentSpec) {
         long instrumentSpecId = await _instrumentSpecRepo.GetId(instrumentSpec)
-            ?? throw new InvalidOperationException("Instrument spec not found");
+            ?? throw new InstrumentSpecNotFoundException(instrumentSpec);
 
         return await _instrumentRawDataRepo.FetchNewestRowTime(instrumentSpecId);
     }
@@ -34,7 +35,7 @@ public class InstrumentRawDataService(
         Instant toInclusive
     ) {
         long instrumentSpecId = await _instrumentSpecRepo.GetId(instrumentSpec)
-            ?? throw new InvalidOperationException("Instrument spec not found");
+            ?? throw new InstrumentSpecNotFoundException(instrumentSpec);
 
         return await _instrumentRawDataRepo.FetchByTimeRange(instrumentSpecId, fromInclusive, toInclusive);
     }

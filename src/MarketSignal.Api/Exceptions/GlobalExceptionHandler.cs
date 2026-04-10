@@ -1,4 +1,6 @@
 using MarketSignal.Contracts.Indicator.Spec;
+using MarketSignal.Core.Indicator;
+using MarketSignal.Core.Instrument;
 using MarketSignal.Core.Instrument.Spec;
 
 using Microsoft.AspNetCore.Diagnostics;
@@ -19,6 +21,8 @@ public class GlobalExceptionHandler(
             UnsupportedInstrumentSpecException e => (StatusCodes.Status400BadRequest, e.Message),
             InvalidRequestException e => (StatusCodes.Status400BadRequest, e.Message),
             InvalidIndicatorArgsException e => (StatusCodes.Status400BadRequest, e.Message),
+            InstrumentSpecNotFoundException e => (StatusCodes.Status404NotFound, e.Message),
+            IndicatorSpecNotFoundException e => (StatusCodes.Status404NotFound, e.Message),
             _ => (StatusCodes.Status500InternalServerError, "Internal server error")
         };
 

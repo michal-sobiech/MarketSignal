@@ -1,6 +1,7 @@
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Contracts.Instrument;
+using MarketSignal.Core.Instrument;
 
 using NodaTime;
 
@@ -17,7 +18,7 @@ public class IndicatorService(
     private readonly IIndicatorRepository _repository = indicatorRepository;
 
     public async Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
-        var (instrumentSpecId, indicatorSpecId) = await FetchSpecsOrThrow(instrumentIndicatorSpec);
+        var (instrumentSpecId, indicatorSpecId) = await FetchSpecIdsOrThrow(instrumentIndicatorSpec);
         return await _repository.FetchNewestRowTime(instrumentSpecId, indicatorSpecId);
     }
 
@@ -35,16 +36,16 @@ public class IndicatorService(
         Instant from,
         Instant to
     ) {
-        var (instrumentSpecId, indicatorSpecId) = await FetchSpecsOrThrow(instrumentIndicatorSpec);
+        var (instrumentSpecId, indicatorSpecId) = await FetchSpecIdsOrThrow(instrumentIndicatorSpec);
         return await _repository.FetchByTimeRange(instrumentSpecId, indicatorSpecId, from, to);
     }
 
-    private async Task<(long instrumentSpecId, long indicatorSpecId)> FetchSpecsOrThrow(InstrumentIndicatorSpec spec) {
+    private async Task<(long instrumentSpecId, long indicatorSpecId)> FetchSpecIdsOrThrow(InstrumentIndicatorSpec spec) {
         long instrumentSpecId = await _instrumentSpecRepository.GetId(spec.InstrumentSpec)
-            ?? throw new InvalidOperationException($"Instrument spec not found: {spec.InstrumentSpec}");
+            ?? throw new InstrumentSpecNotFoundException(spec.InstrumentSpec);
 
         long indicatorSpecId = await _indicatorSpecRepository.GetId(spec.IndicatorSpec)
-            ?? throw new InvalidOperationException($"Indicator spec not found: {spec.IndicatorSpec}");
+            ?? throw new IndicatorSpecNotFoundException(spec.IndicatorSpec);
 
         return (instrumentSpecId, indicatorSpecId);
     }

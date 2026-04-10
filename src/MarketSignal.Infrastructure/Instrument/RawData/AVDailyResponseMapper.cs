@@ -12,9 +12,6 @@ public class AVDailyResponseMapper {
     public static IEnumerable<InstrumentRawDataRow> FromDto(AVDailyResponseDto dto) {
         string timezoneString = dto.MetaData.TimeZone;
 
-        Console.WriteLine("ABC");
-        Console.WriteLine(dto.TimeSeriesDaily["2026-04-07"]);
-
         return dto.TimeSeriesDaily
         .Select(x => new InstrumentRawDataRow(
             Time: ParseDate(x.Key, timezoneString),

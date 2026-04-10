@@ -14,10 +14,17 @@ public class UpdateInstrumentRawDataJobHandler(
     private readonly IJobStore _jobStore = jobStore;
 
     public async Task HandleJob(Guid jobId, UpdateInstrumentRawDataJobPayload payload) {
-        await _instrumentRawDataUpdater.UpdateInstrumentDailyRawData(payload.InstrumentSpec);
+        JobStatus status;
+        try {
+            await _instrumentRawDataUpdater.UpdateInstrumentDailyRawData(payload.InstrumentSpec);
+            status = JobStatus.SUCCESS;
+        }
+        catch {
+            status = JobStatus.ERROR;
+        }
 
         JobEntity entity = (await _jobStore.Fetch(jobId))!;
-        JobEntity updatedEntity = entity with { JobStatus = JobStatus.SUCCESS };
+        JobEntity updatedEntity = entity with { JobStatus = status };
         await _jobStore.Save(updatedEntity);
 
         await Task.CompletedTask;
