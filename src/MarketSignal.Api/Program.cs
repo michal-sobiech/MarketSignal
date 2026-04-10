@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
@@ -29,6 +31,9 @@ builder.Services.AddDbContext<MarketDbContext>((serviceProvider, options) => {
     string connectionString = $"Server={marketDbOptions.Host};Port={marketDbOptions.Port};Database={marketDbOptions.DbName};Uid={marketDbOptions.UserName};Pwd={marketDbOptions.Password};AllowPublicKeyRetrieval=True;";
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+builder.Services.AddScoped<IInstrumentSpecRepository, EfcoreInstrumentSpecRepository>();
+builder.Services.AddScoped<IIndicatorSpecRepository, EfcoreIndicatorSpecRepository>();
+builder.Services.AddScoped<IIndicatorRepository, EfcoreIndicatorRepository>();
 
 // Redis
 builder.Services.AddSingleton<RedisOptions>(_ => new RedisOptions {
@@ -53,15 +58,15 @@ builder.Services.AddSingleton<IJobStore>(serviceProvider =>
     )
 );
 
-// Services
-builder.Services.AddScoped<IInstrumentSpecRepository, EfcoreInstrumentSpecRepository>();
-builder.Services.AddScoped<IIndicatorSpecRepository, EfcoreIndicatorSpecRepository>();
-builder.Services.AddScoped<IIndicatorRepository, EfcoreIndicatorRepository>();
+// App
 builder.Services.AddScoped<IndicatorService>();
 builder.Services.AddSingleton<KeyValuePairsStringParser>();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
-builder.Services.AddControllers();
-
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

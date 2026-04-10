@@ -49,9 +49,11 @@ builder.Services.AddSingleton<IJobStore>(serviceProvider =>
     )
 );
 
+// App
 builder.Services.AddSingleton<InstrumentRawDataUpdater>();
+builder.Services.AddSingleton<UpdateInstrumentRawDataJobHandler>();
 builder.Services.AddSingleton<IndicatorValuesUpdater>();
-
+builder.Services.AddSingleton<UpdateIndicatorValuesJobHandler>();
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();

@@ -10,15 +10,15 @@ namespace MarketSignal.Worker;
 public class Worker(
     IJobQueueConsumer jobQueueConsumer,
     IJobStore jobStore,
-    InstrumentRawDataUpdater instrumentRawDataUpdater,
-    IndicatorValuesUpdater indicatorValuesUpdater,
+    UpdateInstrumentRawDataJobHandler updateInstrumentRawDataJobHandler,
+    UpdateIndicatorValuesJobHandler updateIndicatorValuesJobHandler,
     ILogger<Worker> logger
 ) : BackgroundService {
 
     private readonly IJobQueueConsumer _jobQueueConsumer = jobQueueConsumer;
     private readonly IJobStore _jobStore = jobStore;
-    private readonly InstrumentRawDataUpdater _instrumentRawDataUpdater = instrumentRawDataUpdater;
-    private readonly IndicatorValuesUpdater _indicatorValuesUpdater = indicatorValuesUpdater;
+    private readonly UpdateInstrumentRawDataJobHandler _updateInstrumentRawDataJobHandler = updateInstrumentRawDataJobHandler;
+    private readonly UpdateIndicatorValuesJobHandler _updateIndicatorValuesJobHandler = updateIndicatorValuesJobHandler;
     // private readonly ILogger<Worker> _logger = logger;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
@@ -45,8 +45,8 @@ public class Worker(
         }
 
         await (jobEntity.JobPayload switch {
-            UpdateInstrumentRawDataJobPayload payload => _instrumentRawDataUpdater.UpdateInstrumentRawData(payload.InstrumentSpec),
-            CalcIndicatorJobPayload payload => _indicatorValuesUpdater.CalcAndUpdateIndicatorValues(payload.InstrumentIndicatorSpec),
+            UpdateInstrumentRawDataJobPayload payload => _updateInstrumentRawDataJobHandler.HandleJob(jobId, payload),
+            CalcIndicatorJobPayload payload => _updateIndicatorValuesJobHandler.HandleJob(jobId, payload),
             _ => throw new ArgumentException("Invalid payload")
         });
     }
