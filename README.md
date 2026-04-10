@@ -24,7 +24,7 @@ There are 2 executables: `Api` and `Worker`. `Api` handles user interaction and 
 ## How to run
 1. `cd` to project's directory
 2. Copy `.env.template` file and put it in the same directory. Rename the copy to `.env`.
-3. Fill missing values in `.env`. The Alpha Vantage API key can easily be obtained here: `https://www.alphavantage.co/support/#api-key`.
+3. Fill missing values in `.env`. The Alpha Vantage API key can easily be obtained here: `https://www.alphavantage.co/support/#api-key`. MAKE SURE IT IS NOT EXPIRED. Otherwise the app won't be able to download data. You can test whether your API key works by using this URL: `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=VOD&apikey=API_KEY`. NOTE: sometimes generating a second API key using a different email address does not work. The new API key will still be blocked.
 4. `cd docker`
 5. `docker compose --env-file=../.env up --build`
 
