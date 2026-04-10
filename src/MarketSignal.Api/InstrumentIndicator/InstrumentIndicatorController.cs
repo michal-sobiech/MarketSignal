@@ -1,9 +1,7 @@
-using MarketSignal.Api.Instrument.RawData;
 using MarketSignal.Api.Mappers;
 using MarketSignal.Application;
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
-using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Instrument.RawData;
 using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
