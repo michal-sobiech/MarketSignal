@@ -8,8 +8,8 @@ public class IndicatorSpecService(
 
     private readonly IIndicatorSpecRepository _indicatorSpecRepository = indicatorSpecRepository;
 
-    public Task SaveMany(IEnumerable<IndicatorSpec> specs) {
-        return _indicatorSpecRepository.SaveMany(specs);
+    public Task Save(IndicatorSpec spec) {
+        return _indicatorSpecRepository.Save(spec);
     }
 
 }

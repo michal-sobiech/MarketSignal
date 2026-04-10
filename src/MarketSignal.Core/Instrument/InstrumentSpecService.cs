@@ -8,8 +8,8 @@ public class InstrumentSpecService(
 
     private readonly IInstrumentSpecRepository _instrumentSpecRepository = instrumentSpecRepository;
 
-    public Task SaveMany(IEnumerable<InstrumentSpec> specs) {
-        return _instrumentSpecRepository.SaveMany(specs);
+    public Task Save(InstrumentSpec spec) {
+        return _instrumentSpecRepository.Save(spec);
     }
 
 }

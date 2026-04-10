@@ -18,4 +18,24 @@ public class EfcoreInstrumentSpecRepository(
             ?.Id;
     }
 
+    public async Task<long> GetOrCreateId(InstrumentSpec instrumentSpec) {
+        long? existingId = await GetId(instrumentSpec);
+        return existingId is { } id
+            ? id
+            : await Save(instrumentSpec);
+    }
+
+    public async Task<long> Save(InstrumentSpec spec) {
+        var entity = new InstrumentSpecEntity {
+            Symbol = spec.Symbol,
+            Mic = spec.Mic,
+            DataProvider = spec.DataProviderKind.ToString()
+        };
+
+        _dbContext.InstrumentSpecs.Add(entity);
+        await _dbContext.SaveChangesAsync();
+
+        return entity.Id;
+    }
+
 }

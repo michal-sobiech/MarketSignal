@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 using MarketSignal.Contracts.Instrument.RawData;
-using MarketSignal.Infrastructure.Instrument.Spec;
 
 using Microsoft.EntityFrameworkCore;
 

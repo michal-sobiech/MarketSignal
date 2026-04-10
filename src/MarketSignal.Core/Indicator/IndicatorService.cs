@@ -1,30 +1,51 @@
 using MarketSignal.Contracts.Indicator;
+using MarketSignal.Contracts.Indicator.Spec;
+using MarketSignal.Contracts.Instrument;
 
 using NodaTime;
 
 namespace MarketSignal.Core.Indicator;
 
-public class IndicatorService(IIndicatorRepository indicatorRepository) {
+public class IndicatorService(
+    IInstrumentSpecRepository instrumentSpecRepository,
+    IIndicatorSpecRepository indicatorSpecRepository,
+    IIndicatorRepository indicatorRepository
+) {
 
+    private readonly IInstrumentSpecRepository _instrumentSpecRepository = instrumentSpecRepository;
+    private readonly IIndicatorSpecRepository _indicatorSpecRepository = indicatorSpecRepository;
     private readonly IIndicatorRepository _repository = indicatorRepository;
 
-    public Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
-        return _repository.FetchNewestRowTime(instrumentIndicatorSpec);
+    public async Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
+        var (instrumentSpecId, indicatorSpecId) = await FetchInstrumentIndicatorSpecIds(instrumentIndicatorSpec);
+        return await _repository.FetchNewestRowTime(instrumentSpecId, indicatorSpecId);
     }
 
-    public Task SaveMany(
+    public async Task SaveMany(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         IEnumerable<IndicatorRow> rows
     ) {
-        return _repository.SaveMany(instrumentIndicatorSpec, rows);
+        var (instrumentSpecId, indicatorSpecId) = await FetchInstrumentIndicatorSpecIds(instrumentIndicatorSpec);
+        await _repository.SaveMany(instrumentSpecId, indicatorSpecId, rows);
     }
 
-    public Task<IEnumerable<IndicatorRow>> FetchByTimeRange(
+    public async Task<IEnumerable<IndicatorRow>> FetchByTimeRange(
         InstrumentIndicatorSpec instrumentIndicatorSpec,
         Instant from,
         Instant to
     ) {
-        return _repository.FetchByTimeRange(instrumentIndicatorSpec, from, to);
+        var (instrumentSpecId, indicatorSpecId) = await FetchInstrumentIndicatorSpecIds(instrumentIndicatorSpec);
+        return await _repository.FetchByTimeRange(instrumentSpecId, indicatorSpecId, from, to);
+    }
+
+    private async Task<(long instrumentSpecId, long indicatorSpecId)> FetchInstrumentIndicatorSpecIds(InstrumentIndicatorSpec spec) {
+        long instrumentSpecId = await _instrumentSpecRepository.GetId(spec.InstrumentSpec)
+            ?? throw new InvalidOperationException("Instrument spec not found");
+
+        long indicatorSpecId = await _indicatorSpecRepository.GetId(spec.IndicatorSpec)
+            ?? throw new InvalidOperationException("Indicator spec not found");
+
+        return (instrumentSpecId, indicatorSpecId);
     }
 
 }

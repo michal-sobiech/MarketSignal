@@ -24,9 +24,7 @@ public class InstrumentRawDataService(
         InstrumentSpec instrumentSpec,
         IEnumerable<InstrumentRawDataRow> rows
     ) {
-        long instrumentSpecId = await _instrumentSpecRepo.GetId(instrumentSpec)
-            ?? throw new InvalidOperationException("Instrument spec not found");
-
+        long instrumentSpecId = await _instrumentSpecRepo.GetOrCreateId(instrumentSpec);
         await _instrumentRawDataRepo.SaveMany(instrumentSpecId, rows);
     }
 

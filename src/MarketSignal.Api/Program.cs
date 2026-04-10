@@ -9,6 +9,7 @@ using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Core;
 using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
+using MarketSignal.Core.Instrument;
 using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Instrument.RawData;
 using MarketSignal.Infrastructure.Instrument.Spec;
@@ -81,8 +82,17 @@ using (var scope = app.Services.CreateScope()) {
     var db = scope.ServiceProvider.GetRequiredService<MarketDbContext>();
     db.Database.EnsureCreated();
 
-    IEnumerable<InstrumentSpec>
-    db.InstrumentSpecs.AddRange()
+    // var instrumentSpecService = scope.ServiceProvider.GetRequiredService<InstrumentSpecService>();
+    // List<InstrumentSpec> instrumentSpecs = new() {
+    //     new InstrumentSpec("TSCO", "XLON", InstrumentRawDataProviderKind.ALPHA_VANTAGE),
+    //     new InstrumentSpec("TSCDF", "OTCM", InstrumentRawDataProviderKind.ALPHA_VANTAGE),
+    //     new InstrumentSpec("TCO2", "XFRA", InstrumentRawDataProviderKind.ALPHA_VANTAGE),
+    //     new InstrumentSpec("VOD", "XLON", InstrumentRawDataProviderKind.ALPHA_VANTAGE),
+    //     new InstrumentSpec("IDEA", "XBOM", InstrumentRawDataProviderKind.ALPHA_VANTAGE)
+    // };
+    // await instrumentSpecService.SaveMany(instrumentSpecs);
+
+    // var indictorSpecService = scope.ServiceProvider.GetRequiredService<IndicatorSpecService>();
 }
 
 app.MapControllers();

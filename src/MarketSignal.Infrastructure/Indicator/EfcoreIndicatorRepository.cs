@@ -1,6 +1,4 @@
 using MarketSignal.Contracts.Indicator;
-using MarketSignal.Contracts.Indicator.Spec;
-using MarketSignal.Contracts.Instrument;
 using MarketSignal.Infrastructure.MarketDb;
 
 using Microsoft.EntityFrameworkCore;
@@ -10,35 +8,23 @@ using NodaTime;
 namespace MarketSignal.Infrastructure.Indicator;
 
 public class EfcoreIndicatorRepository(
-    MarketDbContext dbContext,
-    IInstrumentSpecRepository instrumentSpecRepository,
-    IIndicatorSpecRepository indicatorSpecRepository
+    MarketDbContext dbContext
 ) : IIndicatorRepository {
 
     private readonly MarketDbContext _dbContext = dbContext;
-    private readonly IInstrumentSpecRepository _instrumentSpecRepository = instrumentSpecRepository;
-    private readonly IIndicatorSpecRepository _indicatorSpecRepository = indicatorSpecRepository;
 
-    public async Task<Instant?> FetchNewestRowTime(InstrumentIndicatorSpec instrumentIndicatorSpec) {
-        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec)
-            ?? throw new InvalidOperationException("Instrument spec not found");
-
-        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec)
-            ?? throw new InvalidOperationException("Indicator spec not found");
-
+    public async Task<Instant?> FetchNewestRowTime(long instrumentSpecId, long indicatorSpecId) {
         return await _dbContext.IndicatorRows
             .Where(x => x.InstrumentSpecId == instrumentSpecId && x.IndicatorSpecId == indicatorSpecId)
             .Select(x => Instant.FromDateTimeOffset(x.Time))
             .MaxAsync();
     }
 
-    public async Task SaveMany(InstrumentIndicatorSpec instrumentIndicatorSpec, IEnumerable<IndicatorRow> rows) {
-        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec)
-            ?? throw new InvalidOperationException("Instrument spec not found");
-
-        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec)
-            ?? throw new InvalidOperationException("Indicator spec not found");
-
+    public async Task SaveMany(
+        long instrumentSpecId,
+        long indicatorSpecId,
+        IEnumerable<IndicatorRow> rows
+    ) {
         List<IndicatorRowEntity> entities = rows
             .Select(row => new IndicatorRowEntity {
                 Id = 0,
@@ -54,16 +40,11 @@ public class EfcoreIndicatorRepository(
     }
 
     public async Task<IEnumerable<IndicatorRow>> FetchByTimeRange(
-        InstrumentIndicatorSpec instrumentIndicatorSpec,
+        long instrumentSpecId,
+        long indicatorSpecId,
         Instant fromInclusive,
         Instant toInclusive
     ) {
-        long instrumentSpecId = await _instrumentSpecRepository.GetId(instrumentIndicatorSpec.InstrumentSpec)
-            ?? throw new InvalidOperationException("Instrument spec not found");
-
-        long indicatorSpecId = await _indicatorSpecRepository.GetId(instrumentIndicatorSpec.IndicatorSpec)
-            ?? throw new InvalidOperationException("Indicator spec not found");
-
         return await _dbContext.IndicatorRows
             .Where(x =>
                 x.InstrumentSpecId == instrumentSpecId &&
