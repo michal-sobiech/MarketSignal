@@ -21,14 +21,23 @@ public class InstrumentRawDataUpdater(
     }
 
     private async Task<IEnumerable<InstrumentRawDataRow>> FetchNewDailyRows(InstrumentSpec instrumentSpec) {
-        Instant from = Instant.MinValue;
-        if (await _specService.Exists(instrumentSpec)) {
-            from = await _rawDataService.FetchNewestRowTime(instrumentSpec) ?? Instant.MinValue;
-        }
-
+        Instant from = await ChooseFromTime(instrumentSpec);
+        Console.WriteLine("RRRRRR");
+        Console.WriteLine(from.ToDateTimeOffset().ToString());
         Instant now = SystemClock.Instance.GetCurrentInstant();
 
         return await _rawDataProvider.FetchDailyRawData(instrumentSpec, from, now);
+    }
+
+    private async Task<Instant> ChooseFromTime(InstrumentSpec spec) {
+        if (await _specService.Exists(spec)) {
+            Instant? newestRowTime = await _rawDataService.FetchNewestRowTime(spec);
+            if (newestRowTime is { } newestRowTimeDefined) {
+                Instant nextDay = newestRowTimeDefined.Plus(Duration.FromDays(1));
+                return nextDay;
+            }
+        }
+        return Instant.MinValue;
     }
 
 }
