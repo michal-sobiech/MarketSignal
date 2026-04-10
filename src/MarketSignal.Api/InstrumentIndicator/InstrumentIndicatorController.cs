@@ -1,3 +1,5 @@
+using MarketSignal.Api.Exceptions;
+
 using MarketSignal.Contracts.Indicator;
 using MarketSignal.Contracts.Indicator.Spec;
 using MarketSignal.Contracts.Instrument.RawData;
@@ -5,8 +7,9 @@ using MarketSignal.Contracts.Job;
 using MarketSignal.Contracts.Job.Payload;
 using MarketSignal.Contracts.Job.Queue;
 using MarketSignal.Contracts.Job.Store;
-using MarketSignal.Core;
 using MarketSignal.Core.Indicator;
+using MarketSignal.Core.Instrument.Spec;
+using MarketSignal.Core.KeyValuePairsStringParser;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +33,7 @@ public class InstrumentIndicatorController(
 
     [HttpGet("values")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<GetIndicatorValuesResponse> GetIndicatorValues(
+    public async Task<ActionResult<GetIndicatorValuesResponse>> GetIndicatorValues(
         [FromQuery] string symbol,
         [FromQuery] string mic,
         [FromQuery] string dataProvider,
@@ -39,17 +42,12 @@ public class InstrumentIndicatorController(
         [FromQuery] DateTimeOffset from,
         [FromQuery] DateTimeOffset to
     ) {
-        InstrumentRawDataProviderKind dataProviderKind = Enum.Parse<InstrumentRawDataProviderKind>(dataProvider);
-        IndicatorKind indicatorKind = Enum.Parse<IndicatorKind>(indicatorName);
+        var instrumentIndicatorSpec = ParseInstrumentIndicatorSpec(symbol, mic, dataProvider, indicatorName, indicatorArgs);
+
         Instant fromInstant = Instant.FromDateTimeOffset(from);
         Instant toInstant = Instant.FromDateTimeOffset(to);
 
-        var indicatorArgsDict = _keyValuePairsStringParser.Parse(indicatorArgs);
-        IndicatorSpec indicatorSpec = IndicatorSpecFactory.Of(indicatorKind, indicatorArgsDict);
-
-        var instrumentIndicatorSpec = InstrumentIndicatorSpec.Of(symbol, mic, dataProviderKind, indicatorSpec);
-
-        var rows = _indicatorService.FetchByTimeRange(
+        var rows = await _indicatorService.FetchByTimeRange(
             instrumentIndicatorSpec,
             fromInstant,
             toInstant);
@@ -58,6 +56,9 @@ public class InstrumentIndicatorController(
 
     [HttpPost("calculate-values")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<JobIdResponse> CalcIndicatorValues(
         [FromQuery] string symbol,
         [FromQuery] string mic,
@@ -65,13 +66,7 @@ public class InstrumentIndicatorController(
         [FromQuery] string indicatorName,
         [FromQuery] string indicatorArgs
     ) {
-        InstrumentRawDataProviderKind dataProviderKind = Enum.Parse<InstrumentRawDataProviderKind>(dataProvider);
-        IndicatorKind indicatorKind = Enum.Parse<IndicatorKind>(indicatorName);
-
-        var indicatorArgsDict = _keyValuePairsStringParser.Parse(indicatorArgs);
-        IndicatorSpec indicatorSpec = IndicatorSpecFactory.Of(indicatorKind, indicatorArgsDict);
-
-        var instrumentIndicatorSpec = InstrumentIndicatorSpec.Of(symbol, mic, dataProviderKind, indicatorSpec);
+        var instrumentIndicatorSpec = ParseInstrumentIndicatorSpec(symbol, mic, dataProvider, indicatorName, indicatorArgs);
 
         Guid jobId = Guid.NewGuid();
         var payload = new CalcIndicatorJobPayload(instrumentIndicatorSpec);
@@ -82,6 +77,38 @@ public class InstrumentIndicatorController(
 
         var response = new JobIdResponse(jobId);
         return Ok(response);
+    }
+
+    private InstrumentIndicatorSpec ParseInstrumentIndicatorSpec(
+        string symbol,
+        string mic,
+        string dataProvider,
+        string indicatorName,
+        string indicatorArgs
+    ) {
+        if (!Enum.TryParse<InstrumentRawDataProviderKind>(dataProvider, out var dataProviderKind))
+            throw new InvalidRequestException($"Invalid data provider: {dataProvider}");
+
+        if (!Enum.TryParse<IndicatorKind>(indicatorName, out var indicatorKind))
+            throw new InvalidRequestException($"Invalid indicator name: {indicatorName}");
+
+        Dictionary<string, string> indicatorArgsDict = ParseIndicatorArgsDict(indicatorArgs);
+
+        IndicatorSpec indicatorSpec = IndicatorSpecFactory.Of(indicatorKind, indicatorArgsDict);
+        var instrumentIndicatorSpec = InstrumentIndicatorSpec.Of(symbol, mic, dataProviderKind, indicatorSpec);
+
+        SupportedInstrumentSpecRegistry.AssertHasInstrumentSpec(instrumentIndicatorSpec.InstrumentSpec);
+
+        return instrumentIndicatorSpec;
+    }
+
+    private Dictionary<string, string> ParseIndicatorArgsDict(string value) {
+        try {
+            return _keyValuePairsStringParser.Parse(value);
+        }
+        catch {
+            throw new InvalidRequestException($"Invalid indicator args");
+        }
     }
 
 }

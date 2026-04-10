@@ -10,6 +10,7 @@ using MarketSignal.Contracts.Job.Store;
 using MarketSignal.Core;
 using MarketSignal.Core.EnvVar;
 using MarketSignal.Core.Indicator;
+using MarketSignal.Core.KeyValuePairsStringParser;
 using MarketSignal.Infrastructure.Indicator;
 using MarketSignal.Infrastructure.Instrument.RawData;
 using MarketSignal.Infrastructure.Instrument.Spec;

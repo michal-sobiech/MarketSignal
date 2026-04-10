@@ -41,10 +41,10 @@ public class IndicatorService(
 
     private async Task<(long instrumentSpecId, long indicatorSpecId)> FetchSpecsOrThrow(InstrumentIndicatorSpec spec) {
         long instrumentSpecId = await _instrumentSpecRepository.GetId(spec.InstrumentSpec)
-            ?? throw new InvalidOperationException("Instrument spec not found");
+            ?? throw new InvalidOperationException($"Instrument spec not found: {spec.InstrumentSpec}");
 
         long indicatorSpecId = await _indicatorSpecRepository.GetId(spec.IndicatorSpec)
-            ?? throw new InvalidOperationException("Indicator spec not found");
+            ?? throw new InvalidOperationException($"Indicator spec not found: {spec.IndicatorSpec}");
 
         return (instrumentSpecId, indicatorSpecId);
     }

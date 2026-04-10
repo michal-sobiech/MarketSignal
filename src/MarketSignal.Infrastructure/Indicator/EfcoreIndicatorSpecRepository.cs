@@ -14,7 +14,7 @@ public class EfcoreIndicatorSpecRepository(
 
     public Task<long?> GetId(IndicatorSpec indicatorSpec) {
         return indicatorSpec switch {
-            SmaSpec spec => GetSmaSpecId(spec.Period),
+            SmaSpec spec => GetSmaSpecId(spec),
             _ => throw new ArgumentOutOfRangeException(nameof(indicatorSpec), indicatorSpec, "Invalid indicator spec")
         };
     }
@@ -34,10 +34,10 @@ public class EfcoreIndicatorSpecRepository(
         };
     }
 
-    private async Task<long?> GetSmaSpecId(int period) {
+    private async Task<long?> GetSmaSpecId(SmaSpec spec) {
         string indicatorKindStr = IndicatorKind.SMA.ToString();
 
-        JsonNode expectedIndicatorArgs = new JsonObject { ["period"] = period };
+        JsonNode expectedIndicatorArgs = new JsonObject { ["period"] = spec.Period, ["field"] = spec.Field.ToString() };
 
         return _dbContext.IndicatorSpecs
             .Where(x => x.IndictorName == indicatorKindStr)

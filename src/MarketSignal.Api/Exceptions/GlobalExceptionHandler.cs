@@ -1,4 +1,5 @@
 using MarketSignal.Core.Instrument.Spec;
+using MarketSignal.Core.KeyValuePairsStringParser;
 
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -13,8 +14,11 @@ public class GlobalExceptionHandler(
     public async ValueTask<bool> TryHandleAsync(HttpContext ctx, Exception exception, CancellationToken cancelToken) {
         var (status, message) = exception switch {
             InvalidOperationException e => (StatusCodes.Status400BadRequest, ""),
+            ArgumentException e => (StatusCodes.Status400BadRequest, ""),
             KeyNotFoundException e => (StatusCodes.Status404NotFound, ""),
             UnsupportedInstrumentSpecException e => (StatusCodes.Status400BadRequest, e.Message),
+            InvalidRequestException e => (StatusCodes.Status400BadRequest, e.Message),
+            KeyValuePairsStringParserException e => (StatusCodes.Status400BadRequest, e.Message),
             _ => (StatusCodes.Status500InternalServerError, "Internal server error")
         };
 

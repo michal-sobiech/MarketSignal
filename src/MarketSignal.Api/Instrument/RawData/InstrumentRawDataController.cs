@@ -1,3 +1,4 @@
+using MarketSignal.Api.Exceptions;
 using MarketSignal.Contracts.Instrument;
 using MarketSignal.Contracts.Instrument.RawData;
 using MarketSignal.Contracts.Job;
@@ -30,7 +31,8 @@ public class InstrumentRawDataController(
         [FromQuery] string mic,
         [FromQuery] string dataProvider
     ) {
-        var dataProviderKind = Enum.Parse<InstrumentRawDataProviderKind>(dataProvider);
+        if (!Enum.TryParse<InstrumentRawDataProviderKind>(dataProvider, out var dataProviderKind))
+            throw new InvalidRequestException($"Invalid data provider: {dataProvider}");
 
         InstrumentSpec instrumentSpec = new(symbol, mic, dataProviderKind);
         SupportedInstrumentSpecRegistry.AssertHasInstrumentSpec(instrumentSpec);
